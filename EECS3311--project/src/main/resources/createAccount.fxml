@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #8f707a;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <children>
+      <AnchorPane layoutX="230.0" layoutY="32.0" prefHeight="335.0" prefWidth="240.0" style="-fx-background-color: #c2cfef;">
+         <children>
+            <Label layoutX="35.0" layoutY="14.0" text="Create a new account" textFill="#202529">
+               <font>
+                  <Font name="System Italic" size="18.0" />
+               </font>
+            </Label>
+            <VBox layoutX="44.0" layoutY="68.0" prefHeight="200.0" prefWidth="150.0">
+               <children>
+                  <JFXTextField fx:id="FIRSTNAME" alignment="CENTER" promptText="First name">
+                     <VBox.margin>
+                        <Insets bottom="12.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="LASTNAME" alignment="CENTER" promptText="Last name">
+                     <VBox.margin>
+                        <Insets bottom="12.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="EMAIL" alignment="CENTER" promptText="Email address">
+                     <VBox.margin>
+                        <Insets bottom="12.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXPasswordField fx:id="PASSWORD" alignment="CENTER" promptText="Password">
+                     <VBox.margin>
+                        <Insets bottom="12.0" />
+                     </VBox.margin>
+                  </JFXPasswordField>
+                  <JFXPasswordField fx:id="PASSWORD2" alignment="CENTER" promptText="Confrim password">
+                     <VBox.margin>
+                        <Insets bottom="12.0" />
+                     </VBox.margin>
+                  </JFXPasswordField>
+                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#CreateAccount" prefHeight="25.0" prefWidth="151.0" style="-fx-background-color: #8f707a; -fx-background-radius: 5em;" text="Register" textAlignment="CENTER" />
+                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#BACKBUTTON" prefHeight="34.0" prefWidth="150.0" style="-fx-background-color: #8f707a; -fx-background-radius: 5em;" text="Already have an account? Login" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets top="12.0" />
+                     </VBox.margin>
+                  </JFXButton>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
