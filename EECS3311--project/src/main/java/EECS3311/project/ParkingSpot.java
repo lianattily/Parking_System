@@ -4,9 +4,11 @@ public class ParkingSpot {
 	boolean isFilled;
 	ParkingRate rate;
 	PaymentStatus isPaid;
-	Double StartTime;
-	Double ExpirationTime;
+	int StartTime;
+	int ExpirationTime;
 	ParkingSpotStatus status;
+	String LicensePlate;
+	String ID;
 	/**
 	 * Constructor
 	 */
@@ -15,6 +17,19 @@ public class ParkingSpot {
 		isPaid=isPaid.UNPAID;
 		status=status.AVAILABLE;
 	}
+	
+	public ParkingSpot(int start, int end) {
+		StartTime=start;
+		ExpirationTime=end;
+	}
+	public ParkingSpot(String spacenum, String license, int start, int end, Boolean avail) {
+		ID = spacenum;
+		LicensePlate=license;
+		StartTime=start;
+		ExpirationTime=end;
+		isFilled=avail;
+	}
+
 	public boolean isFilled() {
 		if(status==ParkingSpotStatus.AVAILABLE) {
 			return false;

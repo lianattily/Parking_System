@@ -13,8 +13,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			System.out.println(getClass().getResource("/Main.fxml"));
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
+			System.out.println(getClass().getResource("/EnterAs.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/EnterAs.fxml"));
 			AnchorPane root = loader.load();
 			MainController controller = loader.getController();
 			controller.init(primaryStage);

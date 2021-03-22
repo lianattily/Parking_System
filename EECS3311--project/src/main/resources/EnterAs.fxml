@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="432.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/15.0.1" fx:controller="application.MainController">
+   <children>
+      <VBox layoutX="95.0" layoutY="56.0" prefHeight="420.0" prefWidth="500.0" AnchorPane.bottomAnchor="-65.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="509.0" text="Log in as" textAlignment="CENTER" textFill="#34495e">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Quicksand Medium" size="20.0" />
+               </font>
+            </Label>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#AdminLogin" prefHeight="50.0" prefWidth="520.0" style="-fx-background-color: #2c3e50;" text="System Administrator" textFill="WHITE">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="50.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Quicksand Regular" size="23.0" />
+               </font>
+            </JFXButton>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" onAction="#OfficerLogin" prefHeight="50.0" prefWidth="529.0" style="-fx-background-color: #2c3e50;" text="Parking Authority Officer" textAlignment="CENTER" textFill="WHITE">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="50.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Quicksand Regular" size="23.0" />
+               </font>
+            </JFXButton>
+            <JFXButton alignment="CENTER" onAction="#userLogin" prefHeight="50.0" prefWidth="460.0" style="-fx-background-color: #2c3e50;" text="Regular User" textFill="WHITE">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="50.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Quicksand Regular" size="23.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -19,6 +19,11 @@ public class customer implements User {
 		LogInStatus=false;
 	}
 	
+	public boolean getStatus() {
+		return LogInStatus;
+	}
+	
+	
 	@Override
 	public void CreatAccount(String Fname, String Lname, String email, String Password) {
 		this.Fname=Fname;
@@ -51,13 +56,13 @@ public class customer implements User {
 		return LogInStatus;
 	}
 	
-	public boolean bookSpot() {
+	public boolean bookSpot(ParkingSpot spot) {
 		if(BOOKINGS.size()>=3) return false;
 		byte[] array = new byte[7]; // length is bounded by 7
 	    new Random().nextBytes(array);
 	    String BookingID = new String(array, Charset.forName("UTF-8"));
-		ParkingSpot booking=new ParkingSpot();
-		BOOKINGS.put(BookingID, booking);
+		//ParkingSpot booking=new ParkingSpot();
+		BOOKINGS.put(BookingID, spot);
 		return true;
 	}
 	

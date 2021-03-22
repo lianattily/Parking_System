@@ -16,7 +16,7 @@
             <JFXButton alignment="CENTER" layoutX="18.0" layoutY="127.0" prefHeight="49.0" prefWidth="146.0" text="View Bookings" textAlignment="CENTER" textFill="#aab6fb" />
             <JFXButton alignment="CENTER" layoutX="18.0" layoutY="168.0" prefHeight="49.0" prefWidth="146.0" text="Cancel Bookings" textAlignment="CENTER" textFill="#aab6fb" />
             <JFXButton alignment="CENTER" layoutX="18.0" layoutY="259.0" prefHeight="49.0" prefWidth="146.0" ripplerFill="#51e1ed" text="Pay" textAlignment="CENTER" textFill="#aab6fb" />
-            <JFXButton alignment="CENTER" layoutX="18.0" layoutY="210.0" prefHeight="49.0" prefWidth="146.0" text="Book Spot" textAlignment="CENTER" textFill="#aab6fb" />
+            <JFXButton fx:id="BOOK" alignment="CENTER" layoutX="18.0" layoutY="210.0" onAction="#BookSpotUI" prefHeight="49.0" prefWidth="146.0" text="Book Spot" textAlignment="CENTER" textFill="#aab6fb" />
             <Label layoutX="17.0" layoutY="22.0" text="ClicktoBook Parking System" textFill="#aab6fb" />
          </children>
       </Pane>
