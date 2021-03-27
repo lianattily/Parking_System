@@ -51,7 +51,7 @@ public class ListController implements Initializable {
 				int start = rs.getInt("start"); 
 				int end = rs.getInt("end"); 
 				Boolean avail = rs.getBoolean("isAvail");
-				list.add(new ParkingSpot(spacenum, license, start, end, avail));
+				//list.add(new ParkingSpot(spacenum, license, start, end, avail));
 				} 
 		}catch(Exception e){
 					

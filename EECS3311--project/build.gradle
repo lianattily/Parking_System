@@ -8,20 +8,22 @@
 
 plugins {
   id 'application'
-  id 'org.openjfx.javafxplugin' version '0.0.8'
+  id 'org.openjfx.javafxplugin' version '0.0.9'
+  
+   //id 'com.github.sherter.google-java-format' version '0.8'
 }
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
+    //mavenCentral()
     jcenter()
 }
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    //api 'org.apache.commons:commons-math3:3.6.1'
+	// https://mvnrepository.com/artifact/com.jfoenix/jfoenix
+implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.1'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.2-jre'
 
     // Use JUnit test framework
@@ -34,16 +36,20 @@ dependencies {
 }
 javafx {
     version = "15"
-    modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.graphics' ]
+    modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.graphics', 'javafx.base' ]
 }
+//apply plugin: 'com.github.sherter.google-java-format'
 
+//group = 'com.google.maps'
 run {
     if (javafx.platform.classifier == 'win') {
         // Temporal fix for Eclipse with JDK 1.8 and Windows 
         systemProperty "java.library.path", "C:\tmp"
     }
+    jvmArgs = [
+        "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
+    ]
     
 }
-
 
 mainClassName = 'application.Main'

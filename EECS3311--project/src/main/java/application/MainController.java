@@ -1,33 +1,54 @@
 package application;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import EECS3311.project.CreditCard;
+import EECS3311.project.Debit;
 import EECS3311.project.Officer;
 import EECS3311.project.ParkingSpot;
+import EECS3311.project.PaymentMethod;
+import EECS3311.project.PaymentStatus;
+import EECS3311.project.Paypal;
 import EECS3311.project.SystemAdmin;
 import EECS3311.project.customer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
-import parking.assistant.database.DatabaseHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 
 public class MainController implements Initializable {
 	private Stage stage;
+	@FXML
+	private JFXTimePicker start = new JFXTimePicker();
+	@FXML
+	private JFXTimePicker end = new JFXTimePicker();
 	@FXML
 	private TextField FIRSTNAME;
 	@FXML
@@ -40,13 +61,13 @@ public class MainController implements Initializable {
 	private PasswordField PASSWORD;
 	@FXML 
 	private PasswordField PASSWORD2;
-	
 	@FXML 
 	private PasswordField logINPASSWORD;
+
+
 	customer CUSTOMER = new customer();
 	SystemAdmin admin = new SystemAdmin();
 	Officer officer = new Officer();
-	DatabaseHandler databasehandler ;
 	
 	
 	public void init(Stage primaryStage) {
@@ -56,22 +77,32 @@ public class MainController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		databasehandler = new DatabaseHandler();
-		checkData();
+//		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+//		paymentCol.setCellValueFactory(new PropertyValueFactory<>("isPaid"));
+//		availCol.setCellValueFactory(new PropertyValueFactory<>("isFilled"));
+//		tableView.setItems(observableList);
 	}
-	
-	
-	private void checkData() {
-		String qu = "SELECT spacenum FROM PARKING"; 
-		ResultSet rs = databasehandler.execQuery(qu); 
-		try{ 
-			while(rs.next()){ 
-				String numb = rs.getString("spacenum"); 
-				System.out.println(numb);
-				} 
-		}catch(Exception e){
-					
+//	ObservableList<ParkingSpot> observableList = FXCollections.observableArrayList( new ParkingSpot(0, 2));
+	//check if the entries are in the database
+	private boolean checkData(String email, String password) {//add parameter String path
+		String path = "CustomerDatabase.txt"; 
+		String line = ""; 
+		System.out.println("checking for   "+email + "    "+password);
+		//ORDER: Fname+","+Lname+","+email+","+Password
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader(path));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				System.out.println("72 checking printing "+values[2]+"    "+values[3]);
+				if(values[2].equals(email) && values[3].equals(password)) {
+					return true;
 				}
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Checking exception");
+		}
+		return false;
 		}
 
 
@@ -79,71 +110,65 @@ public class MainController implements Initializable {
 	 *	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CUSTOMER UI METHODS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	 * 
 	    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-	@FXML
-	private JFXTextField NUM;
-	@FXML
-	private JFXTextField LICENSE;
-	@FXML
-	private JFXTimePicker start;
-	@FXML
-	private JFXTimePicker end;
-	@FXML 
-	private Button BOOK;
 	
 	@FXML
-	public void BookSpot() {
-		if(NUM.getText().isEmpty() || LICENSE.getText().isEmpty()) { 
-			Alert alert = new Alert(Alert.AlertType.ERROR); 
-			alert.setHeaderText(null); 
-			alert.setContentText("All fields are required"); 
-			alert.showAndWait(); return; } 
-			//need to make spot unavailable and add it to customer's list
-			ParkingSpot p = new ParkingSpot();//TODO: need to somehow add start and end times
-			CUSTOMER.bookSpot(p);
-	}
-	
-	
-	@FXML
-	public void BookSpotUI(ActionEvent event) throws IOException {
-		//if(CUSTOMER.getStatus()) {
-		Parent Scene2root = FXMLLoader.load(getClass().getResource("/bookspot.fxml"));
+	public void BACKBUTTON(ActionEvent event) throws IOException {
+		
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
 		Scene AddInfoScene = new Scene(Scene2root);
 
-		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		window.setScene(AddInfoScene);
 		window.show();
-	//	}
 	}
 	
-	public void CreateAccount() {
+	@FXML
+	public void CreateAccount(ActionEvent event) {
 
-		/********************/
-		if(PASSWORD.getText()==PASSWORD2.getText() && EMAIL.getText().contains("@")) {
+		if(PASSWORD.getText().equals(PASSWORD2.getText())==false) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("Passwords do not match"); 
+			alert.showAndWait();
+		}
+		if(EMAIL.getText().contains("@")==false) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("Please enter a valid email address"); 
+			alert.showAndWait();
+		}
+		if(PASSWORD.getText().equals(PASSWORD2.getText()) && EMAIL.getText().contains("@")) {
 			CUSTOMER.CreatAccount(getFIRST(), getLAST(), getEMAIL(), getPASSWORD());
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setHeaderText(null); 
+			alert.setContentText("You have successfully created an account. Please use your email and password to login"); 
+			alert.showAndWait();
 		}
 		
+
 	}
 	
 	public boolean LogIn() {
-		System.out.println(EMAIL.getText());
-		System.out.println("\n"+PASSWORD.getText());
+		System.out.println(LogINEMAIL.getText());
+		System.out.println("\n"+logINPASSWORD.getText());
 		
-		if(EMAIL.getText()=="MASTER" && PASSWORD.getText()=="A365@MASTERLOGIN!") {
+		if(LogINEMAIL.getText()=="MASTER" && logINPASSWORD.getText()=="@MASTERLOGIN!") {
 			System.out.println("SYSTEM ADMIN LOGIN SUCCESSFULE");
 		}
 		
-		//else if(getEMAIL().contains("@") && CUSTOMER.LogIn(getEMAIL(), getPASSWORD())) {
+		else if(LogINEMAIL.getText().contains("@") && checkData(LogINEMAIL.getText(), logINPASSWORD.getText())) {
 			System.out.println("CUSTOMER LOGIN SUCCESSFUL");
 			return true;
-	//	}
-		//return false;
+		}
+		return false;
 		
 	}
-		
+	
+	Boolean log = false;
 	@FXML
 	public void customerUI(ActionEvent event) throws IOException {
-		//if(LogIn()) System.out.println("LOGIN SUCCESSFUL");
+		if(LogINEMAIL!=null)if(LogIn()) log = true;
+		if(log) {
 		Parent Scene2root = FXMLLoader.load(getClass().getResource("/Customer.fxml"));
 		Scene AddInfoScene = new Scene(Scene2root);
 
@@ -151,7 +176,14 @@ public class MainController implements Initializable {
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		window.setScene(AddInfoScene);
 		window.show();
-		
+		}
+		else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("Could not login"); 
+			alert.showAndWait();
+		}
+	
 	}
 	@FXML
 	private Button createAccount;
@@ -192,43 +224,38 @@ public class MainController implements Initializable {
 		return PASSWORD.getText();
 	}
 	
+	
+	
 	/** %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	 *	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%OFFICER UI METHODS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	 * 
-	    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-	@FXML	//THIS IS FOR OFFICERS ONLY!!!
-	public void AddSpot() {
-		String qu = "INSERT INTO PARKING VALUES ("+
-					"'" + NUM.getText() + "'," + 
-					"'" + LICENSE.getText() + "'," + 
-					"'" + "130" + "'," + 
-					"'" + "830" + "'," + 
-					"" + "true" + "" + 
-				")";
-		
-		if(databasehandler.execaction(qu)){
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setHeaderText(null); 
-			alert.setContentText("Parking spot added successfully"); 
-			alert.showAndWait();
-		}
-		else {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null); 
-			alert.setContentText("Could not add Parking spot"); 
-			alert.showAndWait();
-		}
+	    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 * @throws IOException */
+	@FXML
+	private TextField offID;
+	@FXML 
+	private PasswordField offPassword;
+	
+	@FXML
+	public void OfficerLogin(ActionEvent event) throws IOException {
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/officerLogin.fxml"));
+		Scene AddInfoScene = new Scene(Scene2root);
+
+		//this gets scene information
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(AddInfoScene);
+		window.show();
 	}
 	
 	@FXML
-	public void OfficerLogin(ActionEvent event) {
-		
-	}
-	
-	@FXML
-	private void cancel() {
-		//Stage stage = (Stage) rootPane.getScene().getWindow(); 
-		//stage.close();
+	private void officerUI(ActionEvent event) throws IOException {
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/officer.fxml"));
+		Scene AddInfoScene = new Scene(Scene2root);
+
+		//this gets scene information
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(AddInfoScene);
+		window.show();
 	}
 	
 	/** %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -247,4 +274,14 @@ public class MainController implements Initializable {
 		window.setScene(AddInfoScene);
 		window.show();
 	}
+	
+	@FXML
+	public void AddOfficer(ActionEvent event) {
+		admin.AddOfficer();
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setHeaderText(null); 
+		alert.setContentText("You have successfully added a new officer"); 
+		alert.showAndWait();
+	}
+	
 }

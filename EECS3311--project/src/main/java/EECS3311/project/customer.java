@@ -12,10 +12,11 @@ public class customer implements User {
 	Map<String, ParkingSpot> BOOKINGS;
 	boolean LogInStatus;
 	Payment PAYMENT;
-	PaymentMethod METHOD; //maybe enum?
+	static PaymentMethod METHOD; //maybe enum?
 	private String Fname, Lname, email, password;
 	public customer() {
 		//constructor
+		PAYMENT = new Payment();
 		LogInStatus=false;
 	}
 	
@@ -40,7 +41,7 @@ public class customer implements User {
 	}
 	
 	public void SaveRecord(String Fname, String Lname, String email, String Password) throws IOException {
-		FileWriter fw = new FileWriter("database.txt", true); 
+		FileWriter fw = new FileWriter("CustomerDatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
 		pw.println(Fname+","+Lname+","+email+","+Password); 
@@ -68,7 +69,12 @@ public class customer implements User {
 	
 	public boolean Pay() {
 		PAYMENT.SetPaymentMethod(METHOD);
+		PAYMENT.METHOD=METHOD;
 		return false;
+	}
+	
+	public static void setMethod(PaymentMethod m) {
+		METHOD=m;
 	}
 	
 	public Map<String, ParkingSpot> ViewBookings() {

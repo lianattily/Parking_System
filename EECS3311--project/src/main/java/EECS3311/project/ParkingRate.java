@@ -4,7 +4,7 @@ public class ParkingRate {
 	private int hour;
 	private Double rate;
 	
-	public Double getRate() {
+	public Double getRate() { //hour*rate
 		return 0.0;
 	}
 }

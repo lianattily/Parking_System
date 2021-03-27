@@ -23,7 +23,7 @@ public class Main extends Application {
 
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Parking Booking System");
-			primaryStage.setResizable(false);
+			//primaryStage.setResizable(false);
 			primaryStage.show();		
 			
 		} catch(Exception e) {

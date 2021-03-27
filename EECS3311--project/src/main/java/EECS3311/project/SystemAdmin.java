@@ -24,11 +24,11 @@ public class SystemAdmin implements User {
 		
 	}
 	
-	public void SaveRecord(String Fname, String Lname, String email, String Password) throws IOException {
-		FileWriter fw = new FileWriter("database.txt", true); 
+	public void SaveRecord(String Fname, String Lname, String ID, String Password) throws IOException {
+		FileWriter fw = new FileWriter("OfficerDatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(Fname+","+Lname+","+email+","+Password); 
+		pw.println(Fname+","+Lname+","+ID+","+Password); 
 		pw.flush(); 
 		pw.close();
 	}

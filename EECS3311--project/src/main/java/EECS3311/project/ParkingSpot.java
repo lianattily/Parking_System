@@ -12,22 +12,27 @@ public class ParkingSpot {
 	/**
 	 * Constructor
 	 */
-	public ParkingSpot() {
+	public ParkingSpot(String ID) {
 		isFilled=false;
 		isPaid=isPaid.UNPAID;
 		status=status.AVAILABLE;
+		this.ID=ID;
 	}
 	
 	public ParkingSpot(int start, int end) {
+		isFilled=false;
+		isPaid=isPaid.UNPAID;
+		status=status.AVAILABLE;
 		StartTime=start;
 		ExpirationTime=end;
 	}
-	public ParkingSpot(String spacenum, String license, int start, int end, Boolean avail) {
+	public ParkingSpot(String spacenum, String license, int start, int end) {
 		ID = spacenum;
 		LicensePlate=license;
 		StartTime=start;
 		ExpirationTime=end;
-		isFilled=avail;
+		isFilled=true;
+		
 	}
 
 	public boolean isFilled() {
@@ -42,7 +47,7 @@ public class ParkingSpot {
 		
 	}
 	
-	public double CalculatePayment() {
+	public double CalculatePayment() { //== getRate()
 		return 0;
 		
 	}
@@ -55,5 +60,18 @@ public class ParkingSpot {
 	
 	public void update() {
 		
+	}
+	public boolean getisFilled() {
+		return isFilled;
+	}
+	public boolean setAvail() {
+		isFilled=true;
+		return isFilled;
+	}
+	public PaymentStatus getisPaid() {
+		return isPaid;
+	}
+	public String getID() {
+		return ID;
 	}
 }

@@ -24,22 +24,22 @@
                         <Insets bottom="80.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXButton alignment="CENTER" prefHeight="49.0" prefWidth="191.0" text="View Bookings" textAlignment="CENTER" textFill="#bcab79">
+                  <JFXButton alignment="CENTER" onAction="#AddSpotOfficer" prefHeight="49.0" prefWidth="191.0" text="Add Parking Spot" textAlignment="CENTER" textFill="#bcab79">
                      <font>
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton alignment="CENTER" prefHeight="49.0" prefWidth="191.0" text="Cancel Bookings" textAlignment="CENTER" textFill="#bcab79">
+                  <JFXButton fx:id="BOOK" alignment="CENTER" prefHeight="49.0" prefWidth="181.0" text="Remove Parking Spot" textAlignment="CENTER" textFill="#bcab79">
                      <font>
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton alignment="CENTER" onAction="#pay" prefHeight="49.0" prefWidth="191.0" ripplerFill="#51e1ed" text="Pay" textAlignment="CENTER" textFill="#bcab79">
+                  <JFXButton alignment="CENTER" prefHeight="49.0" prefWidth="191.0" text="Grant Request" textAlignment="CENTER" textFill="#bcab79">
                      <font>
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="BOOK" alignment="CENTER" onAction="#BookSpotUI" prefHeight="49.0" prefWidth="181.0" text="Book Spot" textAlignment="CENTER" textFill="#bcab79">
+                  <JFXButton alignment="CENTER" prefHeight="49.0" prefWidth="191.0" ripplerFill="#51e1ed" text="Cancel Request" textAlignment="CENTER" textFill="#bcab79">
                      <font>
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
