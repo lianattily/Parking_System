@@ -8,7 +8,7 @@
 
 plugins {
   id 'application'
-  id 'org.openjfx.javafxplugin' version '0.0.9'
+  id 'org.openjfx.javafxplugin' version '0.0.8'
   
    //id 'com.github.sherter.google-java-format' version '0.8'
 }
@@ -22,7 +22,9 @@ repositories {
 
 dependencies {
 	// https://mvnrepository.com/artifact/com.jfoenix/jfoenix
-implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.1'
+//implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.1'
+// https://mvnrepository.com/artifact/com.jfoenix/jfoenix
+	//implementation group: 'com.jfoenix', name: 'jfoenix', version: '8.0.1'
 
     implementation 'com.google.guava:guava:28.2-jre'
 
@@ -33,11 +35,15 @@ implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     //JFX dependancies
     implementation 'com.jfoenix:jfoenix:9.0.10'
+    compile 'com.jfoenix:jfoenix:8.0.10'
 }
 javafx {
     version = "15"
     modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.graphics', 'javafx.base' ]
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 //apply plugin: 'com.github.sherter.google-java-format'
 
 //group = 'com.google.maps'
@@ -46,10 +52,34 @@ run {
         // Temporal fix for Eclipse with JDK 1.8 and Windows 
         systemProperty "java.library.path", "C:\tmp"
     }
-    jvmArgs = [
-        "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
-    ]
     
+}
+
+run {
+    jvmArgs = [
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control=com.jfoenix",
+            "--add-exports=javafx.base/com.sun.javafx.binding=com.jfoenix",
+            "--add-exports=javafx.graphics/com.sun.javafx.stage=com.jfoenix",
+            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix",
+    ]
+}
+compileJava {
+    options.encoding = "UTF-8"
+    options.incremental = true
+
+    options.compilerArgs.addAll([
+        "--add-exports",
+        "javafx.base/com.sun.javafx.event=ALL-UNNAMED"
+    ])  
+    options.compilerArgs.addAll([
+        "--add-exports",
+        "javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED"
+    ])  
+    options.compilerArgs.addAll([
+        "--add-exports",
+        "javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED"
+    ])  
 }
 
 mainClassName = 'application.Main'
