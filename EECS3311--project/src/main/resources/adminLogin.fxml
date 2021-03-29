@@ -3,25 +3,51 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+<AnchorPane prefHeight="382.0" prefWidth="384.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <children>
-      <AnchorPane prefHeight="389.0" prefWidth="695.0">
+      <VBox layoutX="67.0" layoutY="11.0" prefHeight="382.0" prefWidth="384.0" style="-fx-background-color: #253031;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#03203c" height="277.0" layoutX="225.0" layoutY="49.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="247.0" />
-            <Label layoutX="318.0" layoutY="79.0" text="Log In" textFill="#5da3fa">
+            <Label alignment="CENTER" prefHeight="32.0" prefWidth="540.0" text="Authorized Log In" textFill="#bcab79">
                <font>
-                  <Font size="22.0" />
+                  <Font name="Quicksand Regular" size="18.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
             </Label>
-            <JFXPasswordField fx:id="logINPASSWORD" layoutX="282.0" layoutY="205.0" promptText="Master Password" unFocusColor="#5da3fa" />
-            <JFXTextField fx:id="logINEMAIL" layoutX="282.0" layoutY="145.0" promptText="Master ID" unFocusColor="#5da3fa" />
-            <JFXButton layoutX="315.0" layoutY="248.0" prefHeight="25.0" prefWidth="67.0" style="-fx-background-color: #5DA3FA; -fx-background-radius: 5em;" text="Log in" />
+            <JFXTextField fx:id="LogINEMAIL" alignment="CENTER" focusColor="#bcab79" promptText="ID" style="-fx-text-fill: white; -fx-prompt-text-fill: white;" unFocusColor="#2978a0">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXPasswordField fx:id="logINPASSWORD" alignment="CENTER" focusColor="#bcab79" promptText="Password" style="-fx-text-fill: white; -fx-prompt-text-fill: white;" unFocusColor="#2978a0">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </JFXPasswordField>
+            <JFXButton alignment="CENTER" buttonType="RAISED" onAction="#adminUI" prefHeight="25.0" prefWidth="492.0" style="-fx-background-color: #BCAB79; -fx-background-radius: 5em;" text="Log in">
+               <VBox.margin>
+                  <Insets left="100.0" right="100.0" top="20.0" />
+               </VBox.margin>
+            </JFXButton>
+            <JFXButton onAction="#RETURN" prefHeight="25.0" prefWidth="405.0" text="Return to main screen" textFill="WHITE">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </JFXButton>
          </children>
-      </AnchorPane>
+         <padding>
+            <Insets top="50.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

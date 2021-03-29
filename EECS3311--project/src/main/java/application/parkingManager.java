@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
@@ -51,6 +53,16 @@ public class parkingManager implements Initializable{
 		//paymentCol.setCellValueFactory(new PropertyValueFactory<>("isPaid"));
 		//availCol.setCellValueFactory(new PropertyValueFactory<>("isFilled"));
 		tableView.setItems(observableList);
+		fill();
+		
+	}
+	public void fill() {
+		tableView.getItems().clear();
+		List<ParkingSpot> s = officer.getSpots();
+		for(ParkingSpot ps: s) {
+			if(!tableView.getItems().contains(ps))
+			tableView.getItems().add(ps);
+		}
 	}
 	ObservableList<ParkingSpot> observableList = FXCollections.observableArrayList(new ParkingSpot("L9A5G2"));
 	
@@ -122,5 +134,99 @@ public class parkingManager implements Initializable{
 		window.setScene(AddInfoScene);
 		window.show();
 	}
+	@FXML
+	private TextField address;
+	@FXML
+	private AnchorPane rootPane;
 	
+	
+	private Boolean availability;
+	
+	private int requests;
+	
+	@FXML
+	public void AddSpot(ActionEvent event) throws IOException {
+		//ADD NEW SPOT
+		Boolean found = false;
+		
+		String path = "ParkingDatabase.txt"; 
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader(path));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				System.out.println(values[0]);
+				if(values[0].equals(address.getText())) {
+					found = true;
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null); 
+					alert.setContentText("Could not add Parking spot because it already exists"); 
+					alert.showAndWait();
+				}
+				if(address.getText().isBlank() || address.getText().isEmpty()) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null); 
+					alert.setContentText("Please enter a real postal code"); 
+					alert.showAndWait();
+				}
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Parking spot adding Checking exception");
+		}
+		if(!found) {
+			ParkingSpot spot = officer.AddSpot(address.getText());
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			fill();
+			alert.setHeaderText(null); 
+			alert.setContentText("Parking spot added successfully"); 
+			alert.showAndWait();
+			Parent Scene2root = FXMLLoader.load(getClass().getResource("/officer.fxml"));
+			Scene AddInfoScene = new Scene(Scene2root);
+
+			//this gets scene information
+			Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+			window.setScene(AddInfoScene);
+			window.show();
+			
+		}
+	}
+	@FXML
+	public void AddSpotOfficer(ActionEvent event) throws IOException {
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/addSpot.fxml"));
+		Scene AddInfoScene = new Scene(Scene2root);
+
+		//this gets scene information
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(AddInfoScene);
+		window.show();
+		
+	}
+	@FXML
+	public void RETURN(ActionEvent event) throws IOException {
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/EnterAs.fxml"));
+		Scene AddInfoScene = new Scene(Scene2root);
+
+		//this gets scene information
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(AddInfoScene);
+		window.show();
+	}
+	
+	@FXML
+	public void RemoveSpot(ActionEvent event) {
+		System.out.println("BEFORE");
+		List<ParkingSpot> t = officer.getSpots();
+		for(ParkingSpot e: t) {
+			System.out.println(e.getID());
+		}
+		ParkingSpot s = tableView.getSelectionModel().getSelectedItem();
+		officer.RemoveSpot(s);
+		System.out.println("AFTER");
+		t = officer.getSpots();
+		for(ParkingSpot e: t) {
+			System.out.println(e.getID());
+		}
+		fill();
+	}
 }

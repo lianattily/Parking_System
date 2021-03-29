@@ -25,7 +25,8 @@ dependencies {
 //implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.1'
 // https://mvnrepository.com/artifact/com.jfoenix/jfoenix
 	//implementation group: 'com.jfoenix', name: 'jfoenix', version: '8.0.1'
-
+	//implementation "de.jensd:fontawesomefx-fontawesome:4.7.0-11"
+	implementation 'de.jensd:fontawesomefx-commons:11.0'
     implementation 'com.google.guava:guava:28.2-jre'
 
     // Use JUnit test framework
@@ -64,22 +65,4 @@ run {
             "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix",
     ]
 }
-compileJava {
-    options.encoding = "UTF-8"
-    options.incremental = true
-
-    options.compilerArgs.addAll([
-        "--add-exports",
-        "javafx.base/com.sun.javafx.event=ALL-UNNAMED"
-    ])  
-    options.compilerArgs.addAll([
-        "--add-exports",
-        "javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED"
-    ])  
-    options.compilerArgs.addAll([
-        "--add-exports",
-        "javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED"
-    ])  
-}
-
 mainClassName = 'application.Main'

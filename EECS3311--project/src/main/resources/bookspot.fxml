@@ -35,17 +35,17 @@
             </JFXTimePicker>
             <HBox prefHeight="79.0" prefWidth="400.0">
                <children>
-                  <JFXButton onAction="#BookSpot" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #2978A0;" text="Book spot" textFill="#bcab79">
+                  <JFXButton buttonType="RAISED" onAction="#BookSpot" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #2978A0;" text="Book spot" textFill="#bcab79">
                      <HBox.margin>
-                        <Insets top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                      <font>
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton onAction="#customerUI" prefHeight="89.0" prefWidth="225.0" style="-fx-background-color: #BCAB79;" text="Cancel">
+                  <JFXButton buttonType="RAISED" onAction="#customerUI" prefHeight="89.0" prefWidth="225.0" style="-fx-background-color: #BCAB79;" text="Cancel">
                      <HBox.margin>
-                        <Insets top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
                </children>

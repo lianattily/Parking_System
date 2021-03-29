@@ -77,13 +77,9 @@ public class MainController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
-//		paymentCol.setCellValueFactory(new PropertyValueFactory<>("isPaid"));
-//		availCol.setCellValueFactory(new PropertyValueFactory<>("isFilled"));
-//		tableView.setItems(observableList);
+
 	}
-//	ObservableList<ParkingSpot> observableList = FXCollections.observableArrayList( new ParkingSpot(0, 2));
-	//check if the entries are in the database
+
 	private boolean checkData(String email, String password) {//add parameter String path
 		String path = "CustomerDatabase.txt"; 
 		String line = ""; 
@@ -152,11 +148,7 @@ public class MainController implements Initializable {
 		System.out.println(LogINEMAIL.getText());
 		System.out.println("\n"+logINPASSWORD.getText());
 		
-		if(LogINEMAIL.getText()=="MASTER" && logINPASSWORD.getText()=="@MASTERLOGIN!") {
-			System.out.println("SYSTEM ADMIN LOGIN SUCCESSFULE");
-		}
-		
-		else if(LogINEMAIL.getText().contains("@") && checkData(LogINEMAIL.getText(), logINPASSWORD.getText())) {
+		if(LogINEMAIL.getText().contains("@") && checkData(LogINEMAIL.getText(), logINPASSWORD.getText())) {
 			System.out.println("CUSTOMER LOGIN SUCCESSFUL");
 			return true;
 		}
@@ -284,4 +276,41 @@ public class MainController implements Initializable {
 		alert.showAndWait();
 	}
 	
+	@FXML
+	public void adminUI(ActionEvent event) throws IOException {
+		if(adminLOGIN()) {
+		System.out.println("SYSTEM ADMIN LOGIN SUCCESSFUL");
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/admin.fxml"));
+		Scene AddInfoScene = new Scene(Scene2root);
+
+		//this gets scene information
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(AddInfoScene);
+		window.show();
+		}
+		else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText("Failed to Login as System Administrator"); 
+			alert.setContentText("Master ID or password are incorrect."); 
+			alert.showAndWait();
+		}
+	}
+	
+	public boolean adminLOGIN() {
+		if(logINPASSWORD.getText().equals(admin.getPASS()) && LogINEMAIL.getText().equals(admin.getID()))
+			return true;
+		else 
+		return false;
+	}
+	
+	@FXML
+	public void RETURN(ActionEvent event) throws IOException {
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/EnterAs.fxml"));
+		Scene AddInfoScene = new Scene(Scene2root);
+
+		//this gets scene information
+		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		window.setScene(AddInfoScene);
+		window.show();
+	}
 }

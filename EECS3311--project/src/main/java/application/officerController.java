@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -51,15 +52,10 @@ public class officerController implements Initializable {
 	
 	private int requests;
 	
-	public void AddSpot() throws IOException {
+	@FXML
+	public void AddSpot(ActionEvent event) throws IOException {
 		//ADD NEW SPOT
 		Boolean found = false;
-		FileWriter fw = new FileWriter("ParkingDatabase.txt", true); 
-		BufferedWriter bw = new BufferedWriter(fw); 
-		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(address+","+availability+","+requests); 
-		pw.flush(); 
-		pw.close();
 		
 		String path = "ParkingDatabase.txt"; 
 		String line = ""; 
@@ -67,7 +63,8 @@ public class officerController implements Initializable {
 			BufferedReader br  = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!=null) {
 				String [] values = line.split(",");
-				if(values[0].equals(address)) {
+				System.out.println(values[0]);
+				if(values[0].equals(address.getText())) {
 					found = true;
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setHeaderText(null); 
@@ -85,17 +82,23 @@ public class officerController implements Initializable {
 			alert.setHeaderText(null); 
 			alert.setContentText("Parking spot added successfully"); 
 			alert.showAndWait();
+			Parent Scene2root = FXMLLoader.load(getClass().getResource("/officer.fxml"));
+			Scene AddInfoScene = new Scene(Scene2root);
+
+			//this gets scene information
+			Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+			window.setScene(AddInfoScene);
+			window.show();
 		}
 	}
 	@FXML
-	public void AddSpotOfficer(ActionEvent event) throws IOException {
-		Parent Scene2root = FXMLLoader.load(getClass().getResource("/addSpot.fxml"));
+	private void officerUI(ActionEvent event) throws IOException {
+		Parent Scene2root = FXMLLoader.load(getClass().getResource("/officer.fxml"));
 		Scene AddInfoScene = new Scene(Scene2root);
 
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		window.setScene(AddInfoScene);
 		window.show();
-		AddSpot();
 	}
 }

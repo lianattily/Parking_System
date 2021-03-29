@@ -16,7 +16,7 @@ public class SystemAdmin implements User {
 	public SystemAdmin() {
 		LogInStatus=false;
 		email = "MASTER";
-		password = "A365@MASTERLOGIN!";
+		password = "MASTERLOGIN!";
 	}
 	@Override
 	public void CreatAccount(String Fname, String Lname, String email, String Password) {
@@ -58,5 +58,11 @@ public class SystemAdmin implements User {
 	
 	public void ChangePaymentStatus() {
 		
+	}
+	public String getID() {
+		return email;
+	}
+	public String getPASS() {
+		return password;
 	}
 }
