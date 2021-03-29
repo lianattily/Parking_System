@@ -1,22 +1,28 @@
 package EECS3311.project;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SystemAdmin implements User {
 	private String email, password;
 	private boolean LogInStatus;
-	private Map<Integer, Officer> OFFICERS;
-	private int cnt = 0;
+	private List<Officer> OFFICERS; //initialize with entries in database
+	private Integer cnt = 0;
 	
 	//constructor
 	public SystemAdmin() {
 		LogInStatus=false;
 		email = "MASTER";
 		password = "MASTERLOGIN!";
+		OFFICERS = new LinkedList<Officer>();
+		init();
 	}
 	@Override
 	public void CreatAccount(String Fname, String Lname, String email, String Password) {
@@ -24,11 +30,28 @@ public class SystemAdmin implements User {
 		
 	}
 	
-	public void SaveRecord(String Fname, String Lname, String ID, String Password) throws IOException {
+	private void init() {
+		String path = "OfficerDatabase.txt"; 
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader(path));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				Officer s = new Officer(values[0], values[1]);
+				OFFICERS.add(s);
+				}
+			}
+		catch (Exception e) {
+			
+		}
+		
+	}
+	
+	public void SaveRecord(String ID, String Password) throws IOException {
 		FileWriter fw = new FileWriter("OfficerDatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(Fname+","+Lname+","+ID+","+Password); 
+		pw.println(ID+","+Password); 
 		pw.flush(); 
 		pw.close();
 	}
@@ -40,18 +63,26 @@ public class SystemAdmin implements User {
 		return LogInStatus;
 	}
 
-	public boolean AddOfficer() {
-		Officer newOfficer = new Officer();
-		OFFICERS.put(cnt, newOfficer);
+	public boolean AddOfficer(String ID, String password) throws IOException {
+		Officer newOfficer = new Officer(ID, password);
+		if(!OFFICERS.contains(newOfficer)) {
+		OFFICERS.add(newOfficer);
 		cnt++;
+		SaveRecord(ID, password);
+		return true;
+		}
 		return false;
 	}
 
-	public boolean RemoveOfficer(int ID) {
-		if(OFFICERS.get(ID)!=null) {
-		OFFICERS.remove(ID);
-		cnt--;
-		return true;
+	
+	public boolean RemoveOfficer(String ID) {
+		
+		for(int i=0;i<cnt;i++) {
+			if(OFFICERS.get(i).getID().equals(ID)) {
+				OFFICERS.remove(i);
+				cnt--;
+				return true;
+				}
 		}
 		return false;
 	}
@@ -65,4 +96,13 @@ public class SystemAdmin implements User {
 	public String getPASS() {
 		return password;
 	}
+	
+	public List<Officer> getList(){
+		List<Officer> temp = new ArrayList<Officer>();
+		for(int i = 0;i < cnt ;i++) {
+			temp.add(OFFICERS.get(i));
+		}
+		return temp;
+	}
+	
 }

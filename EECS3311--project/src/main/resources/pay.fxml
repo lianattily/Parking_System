@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #BCAB79;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.payController">
+<AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.payController">
    <children>
-      <VBox prefHeight="333.0" prefWidth="313.0">
+      <VBox alignment="CENTER" prefHeight="333.0" prefWidth="313.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="365.0" text="Pay" textAlignment="CENTER" />
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -63,11 +63,20 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXButton onAction="#doPay" prefHeight="74.0" prefWidth="151.0" style="-fx-background-color: #315659;" text="Make Payment" textFill="#bcab79" />
-                  <JFXButton onAction="#savePaymentMethod" prefHeight="74.0" prefWidth="165.0" style="-fx-background-color: #253031;" text="Save Payment Method" textFill="#bcab79" />
+                  <JFXButton buttonType="RAISED" onAction="#doPay" prefHeight="74.0" prefWidth="151.0" style="-fx-background-color: #315659;" text="Make Payment" textFill="#bcab79">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin></JFXButton>
+                  <JFXButton buttonType="RAISED" onAction="#savePaymentMethod" prefHeight="74.0" prefWidth="165.0" style="-fx-background-color: #253031;" text="Save Payment Method" textFill="#bcab79">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin></JFXButton>
                </children>
             </HBox>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </VBox>
    </children>
 </AnchorPane>

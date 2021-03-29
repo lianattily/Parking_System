@@ -40,7 +40,7 @@ public class customer implements User {
 		
 	}
 	
-	public void SaveRecord(String Fname, String Lname, String email, String Password) throws IOException {
+	private void SaveRecord(String Fname, String Lname, String email, String Password) throws IOException {
 		FileWriter fw = new FileWriter("CustomerDatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
@@ -100,12 +100,6 @@ public class customer implements User {
 		
 	}
 
-	
-//	public static void main(String[] args){
-//		
-//		customer c = new customer();
-//		c.CreatAccount("Lian", "Attily", "lianattily@gmail.com", "ravi0215.");
-//	}
 	
 	
 }

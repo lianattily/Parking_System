@@ -9,10 +9,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.opencsv.CSVWriter;
+
 import javafx.scene.control.Alert;
 
 public class Officer implements User {
-	private String ID, password;
+	private String ID;
+	private String password;
 	List<ParkingSpot> Spots;
 	boolean LogInStatus;
 	
@@ -21,6 +24,10 @@ public class Officer implements User {
 		LogInStatus=false;
 		Spots = new ArrayList<ParkingSpot>();
 		fill();
+	}
+	public Officer(String ID, String password) {
+		this.ID=ID;
+		this.password=password;
 	}
 	
 	private void fill() {
@@ -46,12 +53,29 @@ public class Officer implements User {
 	}
 	
 	public void SaveRecord(String ID, boolean b, PaymentStatus paymentStatus) throws IOException {
+		String avail="Booked";
+		if(b) {
+			avail ="Available";
+		}
 		FileWriter fw = new FileWriter("Parkingdatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(ID+","+b+","+paymentStatus); 
+		pw.println(ID+","+avail+","+paymentStatus.toString()); 
 		pw.flush(); 
 		pw.close();
+		
+		try {		
+			CSVWriter writer = new CSVWriter(new FileWriter("Parkingdatabase.csv")); 
+			List<String[]> therows = new ArrayList<>(); 
+			
+			String[] s = new String[] {ID,avail, paymentStatus.toString()};
+			therows.add(s); 
+			writer.writeAll(therows); 
+			writer.close();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public boolean LogIn(String ID, String password) {
@@ -71,6 +95,7 @@ public class Officer implements User {
 	
 	public void RemoveSpot(ParkingSpot s) {
 		Spots.remove(s);
+		//must remove from database
 	}
 	
 	public void CancelRequest(String ID) {
@@ -82,7 +107,7 @@ public class Officer implements User {
 		}
 	}
 	
-	public void GrantRequest(int ID) {
+	public void GrantRequest(String ID) {
 		for(ParkingSpot s: Spots) {
 			if(s.ID.equals(ID)) {
 				s.setAvail();
@@ -101,5 +126,9 @@ public class Officer implements User {
 			System.out.println(s.getID());
 		}
 		return Spots;
+	}
+	
+	public String getID() {
+		return ID;
 	}
 }

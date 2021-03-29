@@ -21,17 +21,10 @@ repositories {
 }
 
 dependencies {
-	// https://mvnrepository.com/artifact/com.jfoenix/jfoenix
-//implementation group: 'com.jfoenix', name: 'jfoenix', version: '9.0.1'
-// https://mvnrepository.com/artifact/com.jfoenix/jfoenix
-	//implementation group: 'com.jfoenix', name: 'jfoenix', version: '8.0.1'
-	//implementation "de.jensd:fontawesomefx-fontawesome:4.7.0-11"
+	implementation 'com.opencsv:opencsv:4.1'
 	implementation 'de.jensd:fontawesomefx-commons:11.0'
     implementation 'com.google.guava:guava:28.2-jre'
 
-    // Use JUnit test framework
-//    testImplementation 'junit:junit:4.12'
-        // Use JUnit test framework
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     //JFX dependancies

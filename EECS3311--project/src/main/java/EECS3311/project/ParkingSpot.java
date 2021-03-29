@@ -8,14 +8,17 @@ public class ParkingSpot {
 	int ExpirationTime;
 	ParkingSpotStatus status;
 	String LicensePlate;
-	String ID;
+	public String ID;
+	public String avail, stat;
 	/**
 	 * Constructor
 	 */
 	public ParkingSpot(String ID) {
 		isFilled=false;
 		isPaid=isPaid.UNPAID;
+		avail = isPaid.toString();
 		status=status.AVAILABLE;
+		stat=status.toString();
 		this.ID=ID;
 	}
 	
@@ -25,6 +28,8 @@ public class ParkingSpot {
 		status=status.AVAILABLE;
 		StartTime=start;
 		ExpirationTime=end;
+		stat=status.toString();
+		avail = isPaid.toString();
 	}
 	public ParkingSpot(String spacenum, String license, int start, int end) {
 		ID = spacenum;
@@ -32,6 +37,8 @@ public class ParkingSpot {
 		StartTime=start;
 		ExpirationTime=end;
 		isFilled=true;
+		stat=status.toString();
+		avail = isPaid.toString();
 		
 	}
 
@@ -54,6 +61,8 @@ public class ParkingSpot {
 	
 	public boolean freeSpot() {
 		isFilled=false;
+		status= status.AVAILABLE;
+		stat = status.toString();
 		return false;
 		
 	}
@@ -66,6 +75,8 @@ public class ParkingSpot {
 	}
 	public boolean setAvail() {
 		isFilled=true;
+		status= status.FILLED;
+		stat = status.toString();
 		return isFilled;
 	}
 	public PaymentStatus getisPaid() {
@@ -73,5 +84,11 @@ public class ParkingSpot {
 	}
 	public String getID() {
 		return ID;
+	}
+	public String getStat() {
+		return stat;
+	}
+	public String getAvail() {
+		return avail;
 	}
 }

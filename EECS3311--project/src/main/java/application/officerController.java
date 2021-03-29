@@ -33,14 +33,14 @@ public class officerController implements Initializable {
 		// TODO Auto-generated method stub
 		
 	}
-	@FXML
-	public void AddOfficer(ActionEvent event) {
-		admin.AddOfficer();
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setHeaderText(null); 
-		alert.setContentText("You have successfully added a new officer"); 
-		alert.showAndWait();
-	}
+//	@FXML
+//	public void AddOfficer(ActionEvent event) throws IOException {
+//		admin.AddOfficer();
+//		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//		alert.setHeaderText(null); 
+//		alert.setContentText("You have successfully added a new officer"); 
+//		alert.showAndWait();
+//	}
 	
 	@FXML
 	private TextField address;
