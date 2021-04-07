@@ -9,7 +9,7 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.8'
-  
+  id 'jacoco'
    //id 'com.github.sherter.google-java-format' version '0.8'
 }
 
@@ -21,6 +21,21 @@ repositories {
 }
 
 dependencies {
+    compile "org.openjfx:javafx-graphics:11.0.1:win"
+    compile "org.openjfx:javafx-graphics:11.0.1:linux"
+    compile "org.openjfx:javafx-graphics:11.0.1:mac"
+    compile 'de.jensd:fontawesomefx-fontawesome:4.6.3'
+compile 'de.jensd:fontawesomefx-materialdesignfont:1.6.50'
+compile 'de.jensd:fontawesomefx-materialicons:2.2.0'
+compile 'de.jensd:fontawesomefx-octicons:4.3.0'
+compile 'de.jensd:fontawesomefx-icons525:2.6.0'
+compile 'de.jensd:fontawesomefx-weathericons:2.0-3'
+compile 'de.jensd:fontawesomefx-commons:8.12'
+compile 'de.jensd:fontawesomefx-controls:8.12'
+//compile group: 'org.jfxtras', name: 'jfxtras-controls', version: '8.0-r1-SNAPSHOT'
+//implementation 'org.jfxtras:jfxtras-all:10.0-r1'
+    
+    
 	implementation 'com.opencsv:opencsv:4.1'
 	implementation 'de.jensd:fontawesomefx-commons:11.0'
     implementation 'com.google.guava:guava:28.2-jre'
@@ -30,6 +45,12 @@ dependencies {
     //JFX dependancies
     implementation 'com.jfoenix:jfoenix:9.0.10'
     compile 'com.jfoenix:jfoenix:8.0.10'
+    compile group: 'com.lynden', name: 'GMapsFX', version: '2.0.9'
+    
+    testCompile "org.testfx:testfx-core:4.0.16-alpha" 
+    testCompile "org.testfx:testfx-junit5:4.0.16-alpha" 
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+
 }
 javafx {
     version = "15"
@@ -38,9 +59,7 @@ javafx {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-//apply plugin: 'com.github.sherter.google-java-format'
 
-//group = 'com.google.maps'
 run {
     if (javafx.platform.classifier == 'win') {
         // Temporal fix for Eclipse with JDK 1.8 and Windows 
@@ -49,13 +68,29 @@ run {
     
 }
 
-run {
-    jvmArgs = [
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix",
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control=com.jfoenix",
-            "--add-exports=javafx.base/com.sun.javafx.binding=com.jfoenix",
-            "--add-exports=javafx.graphics/com.sun.javafx.stage=com.jfoenix",
-            "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix",
-    ]
+test {
+  useJUnitPlatform()
+  testLogging {
+    events 'passed', 'skipped', 'failed'
+  }
+  finalizedBy jacocoTestReport // report is always generated after tests run
+  
+}
+
+
+
+jacoco {
+    toolVersion = "0.8.6"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+    //reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport{
+  group = "build"
+  reports {
+    xml.enabled false
+    csv.enabled false
+    html.destination file("${buildDir}/jacocoHtml")
+  }
 }
 mainClassName = 'application.Main'

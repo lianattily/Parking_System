@@ -1,10 +1,12 @@
 package EECS3311.project;
 
 public class ParkingRate {
-	private int hour;
-	private Double rate;
+	private int rate;
 	
-	public Double getRate() { //hour*rate
-		return 0.0;
+	public void setRate(int rate) {	//set by officer when they add the spot
+		this.rate=rate;
+	}
+	public int getRate() { //hour*rate
+		return rate;
 	}
 }

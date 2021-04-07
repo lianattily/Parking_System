@@ -5,7 +5,26 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.InfoWindow;
+import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+
 import com.jfoenix.controls.JFXTextField;
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
 
 import EECS3311.project.Officer;
 import EECS3311.project.ParkingSpot;
@@ -23,11 +42,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class adminController  implements Initializable{
 	Officer officer = new Officer();
 	SystemAdmin admin = new SystemAdmin();
+	@FXML
+	private ComboBox<String> status;
 	@FXML private JFXTextField ID, password;
 	@FXML
 	private TableView<ParkingSpot> tableView;
@@ -42,15 +64,18 @@ public class adminController  implements Initializable{
 	private TableView<Officer> officersView;
 	@FXML
 	private TableColumn<Officer, String> officerID;
-	
+    
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+       // mapView.addMapInializedListener(this);
+
 		officerID.setCellValueFactory(new PropertyValueFactory<>("ID"));
-		officersView.setItems(officerList);
+		//officersView.setItems(officerList);
 		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
 		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
-		tableView.setItems(observableList);
+		status.getItems().add("Paid");
+		status.getItems().add("Unpaid");
 		try {
 			fill();
 		} catch (IOException e) {
@@ -59,6 +84,7 @@ public class adminController  implements Initializable{
 		}
 		
 	}
+
 	public void fill() throws IOException {
 		tableView.getItems().clear();
 		List<ParkingSpot> s = officer.getSpots();
@@ -71,6 +97,7 @@ public class adminController  implements Initializable{
 		officersView.getItems().clear();
 		List<Officer> o = admin.getList();
 		for(Officer of: o) {
+			System.out.println(of.getID());
 			if(!officersView.getItems().contains(of))
 				officersView.getItems().add(of);
 		}
@@ -78,11 +105,9 @@ public class adminController  implements Initializable{
 	}
 	
 	
-	ObservableList<ParkingSpot> observableList = FXCollections.observableArrayList(new ParkingSpot("L9A5G2"));
-	ObservableList<Officer> officerList= FXCollections.observableArrayList(new Officer("L9A5G2","hi"));
 	@FXML
 	public void UpdatePayment(ActionEvent event) {
-		
+		//admin.ChangePaymentStatus();	
 	}
 	
 	@FXML
@@ -103,7 +128,7 @@ public class adminController  implements Initializable{
 	}
 	
 	@FXML
-	public void RemoveOfficer(ActionEvent event) throws IOException {
+	public void RemoveOfficer(ActionEvent event) throws Exception {
 
 		if(officersView.getSelectionModel().getSelectedItem()!=null) {
 			System.out.println("HERE");
@@ -130,7 +155,32 @@ public class adminController  implements Initializable{
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		window.setScene(AddInfoScene);
+		window.getIcons().add(new Image(""));
+		
 		window.show();
+	}
+	
+	@FXML
+	public void update(ActionEvent event) throws IOException {
+		if(tableView.getSelectionModel().getSelectedItem()==null) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setHeaderText("No spot selected"); 
+			alert.setContentText("Please select a booking from the list"); 
+			alert.showAndWait();
+		}else {
+			String s = status.getSelectionModel().getSelectedItem();
+			switch(s) {
+			case "Paid":  if(admin.ChangePaymentStatus(tableView.getSelectionModel().getSelectedItem())) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setHeaderText(null); 
+				alert.setContentText("Update status to PAID"); 
+				alert.showAndWait();
+				fill();
+			}
+					break;
+			default: 
+			}
+		}
 	}
 
 }

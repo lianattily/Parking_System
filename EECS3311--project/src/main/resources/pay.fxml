@@ -1,82 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.payController">
+<AnchorPane prefHeight="427.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.payController">
    <children>
-      <VBox alignment="CENTER" prefHeight="333.0" prefWidth="313.0">
+      <HBox prefHeight="300.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="365.0" text="Pay" textAlignment="CENTER" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <VBox prefHeight="427.0" prefWidth="180.0" style="-fx-background-color: #bcab79;">
                <children>
-                  <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="105.0" text="Paypal" textAlignment="CENTER">
-                     <HBox.margin>
-                        <Insets left="5.0" top="25.0" />
-                     </HBox.margin>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="tg" />
-                     </toggleGroup>
-                  </JFXRadioButton>
-                  <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="104.0" text="Debit" textAlignment="CENTER" toggleGroup="$tg">
-                     <HBox.margin>
-                        <Insets left="5.0" top="25.0" />
-                     </HBox.margin>
-                  </JFXRadioButton>
-                  <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="109.0" text="Credit card" textAlignment="CENTER" toggleGroup="$tg">
-                     <HBox.margin>
-                        <Insets left="5.0" top="25.0" />
-                     </HBox.margin>
-                  </JFXRadioButton>
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="163.0" text="To pay:" textFill="#315659">
+                     <VBox.margin>
+                        <Insets top="200.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Quicksand Regular" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="amount" alignment="CENTER" prefHeight="17.0" prefWidth="163.0" textFill="#315659">
+                     <font>
+                        <Font name="Quicksand Regular" size="30.0" />
+                     </font>
+                  </Label>
                </children>
-            </HBox>
-            <JFXTextField fx:id="cardholder" promptText="Cardholder Name:">
-               <VBox.margin>
-                  <Insets left="10.0" right="10.0" top="15.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <JFXTextField fx:id="cardnumber" promptText="Card Number:">
-               <VBox.margin>
-                  <Insets left="10.0" right="10.0" top="15.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="427.0" prefWidth="408.0">
                <children>
-                  <JFXDatePicker prefHeight="28.0" prefWidth="225.0" promptText="Expiration date" />
-                  <JFXTextField fx:id="CVV" prefHeight="32.0" prefWidth="71.0" promptText="CVV">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="365.0" text="Payments" textAlignment="CENTER">
+                     <font>
+                        <Font name="Quicksand Regular" size="25.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="17.0" prefWidth="419.0" text="Please pick a payment method" />
+                  <HBox prefHeight="59.0" prefWidth="346.0">
+                     <children>
+                        <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="105.0" text="Paypal" textAlignment="CENTER">
+                           <HBox.margin>
+                              <Insets left="5.0" top="25.0" />
+                           </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="tg" />
+                           </toggleGroup>
+                        </JFXRadioButton>
+                        <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="104.0" text="Debit" textAlignment="CENTER" toggleGroup="$tg">
+                           <HBox.margin>
+                              <Insets left="5.0" top="25.0" />
+                           </HBox.margin>
+                        </JFXRadioButton>
+                        <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="109.0" text="Credit card" textAlignment="CENTER" toggleGroup="$tg">
+                           <HBox.margin>
+                              <Insets left="5.0" top="25.0" />
+                           </HBox.margin>
+                        </JFXRadioButton>
+                     </children>
+                  </HBox>
+                  <JFXTextField fx:id="cardholder" promptText="Cardholder Name:">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="15.0" />
+                     </VBox.margin>
                   </JFXTextField>
+                  <JFXTextField fx:id="cardnumber" promptText="Card Number:">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="15.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <HBox prefHeight="55.0" prefWidth="326.0">
+                     <children>
+                        <DatePicker prefHeight="25.0" prefWidth="205.0" promptText="Expiration Date">
+                           <HBox.margin>
+                              <Insets bottom="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </DatePicker>
+                        <JFXTextField fx:id="CVV" prefHeight="32.0" prefWidth="111.0" promptText="CVV">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </JFXTextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="15.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="125.0" prefWidth="346.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="388.0">
+                           <children>
+                              <JFXComboBox fx:id="bookings" onAction="#setAmount" prefHeight="25.0" prefWidth="363.0" promptText="Pick a booked spot">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXButton buttonType="RAISED" onAction="#doPay" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: #315659;" text="Pay Now" textFill="#bcab79">
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </JFXButton>
+                              <Separator prefWidth="200.0" />
+                              <JFXButton buttonType="RAISED" onAction="#savePaymentMethod" prefHeight="25.0" prefWidth="421.0" text="or save payment method to pay later" textFill="#7a6d48">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
                </children>
-               <VBox.margin>
-                  <Insets left="10.0" right="10.0" top="15.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <JFXButton buttonType="RAISED" onAction="#doPay" prefHeight="74.0" prefWidth="151.0" style="-fx-background-color: #315659;" text="Make Payment" textFill="#bcab79">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin></JFXButton>
-                  <JFXButton buttonType="RAISED" onAction="#savePaymentMethod" prefHeight="74.0" prefWidth="165.0" style="-fx-background-color: #253031;" text="Save Payment Method" textFill="#bcab79">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin></JFXButton>
-               </children>
-            </HBox>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
          </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </VBox>
+      </HBox>
    </children>
 </AnchorPane>

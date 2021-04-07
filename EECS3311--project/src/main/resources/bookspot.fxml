@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import jfxtras.scene.layout.HBox?>
 
-<AnchorPane prefHeight="263.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.parkingManager">
+<AnchorPane prefHeight="263.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.bookingController">
    <children>
-      <VBox layoutX="207.0" layoutY="113.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="207.0" layoutY="113.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <JFXComboBox fx:id="options" focusColor="#bcab79" prefHeight="25.0" prefWidth="489.0" promptText="Available Spots (Postal Code)" unFocusColor="#bcab79">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </JFXComboBox>
             <JFXTextField fx:id="NUM" focusColor="#bcab79" promptText="Parking space number (Postal Code)" unFocusColor="#bcab79">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -23,17 +30,63 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
-            <JFXTimePicker fx:id="start" defaultColor="#2978a0" prefHeight="28.0" prefWidth="403.0" promptText="Start time" style="-fx-unfocus-color: #BCAB79;">
+            <HBox alignment="CENTER" prefHeight="18.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="From:">
+                     <padding>
+                        <Insets left="10.0" right="100.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Until:">
+                     <padding>
+                        <Insets left="100.0" right="10.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
-            </JFXTimePicker>
-            <JFXTimePicker fx:id="end" defaultColor="#2978a0" prefHeight="28.0" prefWidth="403.0" promptText="End time" style="-fx-unfocus-color: #BCAB79;">
+            </HBox>
+            <HBox alignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
-            </JFXTimePicker>
-            <HBox prefHeight="79.0" prefWidth="400.0">
+               <children>
+                  <JFXTextField fx:id="Fhour" alignment="CENTER" promptText="Hour">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </JFXTextField>
+                  <Label text=":" />
+                  <JFXTextField fx:id="Fmin" alignment="CENTER" promptText="Minute">
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </JFXTextField>
+                  <Separator orientation="VERTICAL" prefHeight="2.0" prefWidth="8.0">
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </Separator>
+                  <JFXTextField fx:id="Thour" alignment="CENTER" promptText="Hour">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </JFXTextField>
+                  <Label text=":" />
+                  <JFXTextField fx:id="Tmin" alignment="CENTER" promptText="Minute">
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </JFXTextField>
+               </children></HBox>
+            <HBox alignment="CENTER" prefHeight="151.0" prefWidth="400.0">
                <children>
                   <JFXButton buttonType="RAISED" onAction="#BookSpot" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #2978A0;" text="Book spot" textFill="#bcab79">
                      <HBox.margin>
@@ -43,7 +96,7 @@
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" onAction="#customerUI" prefHeight="89.0" prefWidth="225.0" style="-fx-background-color: #BCAB79;" text="Cancel">
+                  <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#customerUI" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #BCAB79;" text="Cancel">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>

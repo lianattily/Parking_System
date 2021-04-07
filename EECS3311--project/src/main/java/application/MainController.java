@@ -41,6 +41,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
 public class MainController implements Initializable {
@@ -163,9 +164,11 @@ public class MainController implements Initializable {
 		if(log) {
 		Parent Scene2root = FXMLLoader.load(getClass().getResource("/Customer.fxml"));
 		Scene AddInfoScene = new Scene(Scene2root);
-
+		
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		//window.getIcons().add(new Image("https://cdn.dribbble.com/users/2449441/screenshots/6113182/parkit_app_icon.png"));
+
 		window.setScene(AddInfoScene);
 		window.show();
 		}

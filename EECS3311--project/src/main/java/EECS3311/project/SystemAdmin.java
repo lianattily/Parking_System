@@ -2,6 +2,8 @@ package EECS3311.project;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -75,21 +77,47 @@ public class SystemAdmin implements User {
 	}
 
 	
-	public boolean RemoveOfficer(String ID) {
+	public boolean RemoveOfficer(String ID) throws Exception {
 		
 		for(int i=0;i<cnt;i++) {
 			if(OFFICERS.get(i).getID().equals(ID)) {
 				OFFICERS.remove(i);
 				cnt--;
-				return true;
+				return removeRecord(ID);
 				}
 		}
 		return false;
 	}
 	
-	public void ChangePaymentStatus() {
+	public boolean ChangePaymentStatus(ParkingSpot s) throws IOException {
+		s.isPaid= s.isPaid.PAID;
+		//boolean success = updateDatabase(s.getID(), s.isPaid.toString(), s.ExpirationTime.toString());
+		return true;
 		
 	}
+	
+	/* 
+	 * Update BookingsDatabase when payment status changes
+	 */
+	private boolean updateDatabase(String id,  String PaymentStatus, String Expiration) throws IOException {
+//		customer cust = new customer();
+//		List<ParkingSpot> list = cust.ViewBookings();
+//		for(ParkingSpot s: list) {
+//			if(s.getID().equals(id)) {
+//				FileWriter fw = new FileWriter("BookingsDatabase.txt", true); 
+//				BufferedWriter bw = new BufferedWriter(fw); 
+//				PrintWriter pw = new PrintWriter(bw); 
+//				pw.println(id+","+PaymentStatus+","+Expiration); 
+//				pw.flush(); 
+//				pw.close();
+//				return true;
+//			}
+//		}
+		
+		
+		return false;
+	}
+	
 	public String getID() {
 		return email;
 	}
@@ -98,11 +126,38 @@ public class SystemAdmin implements User {
 	}
 	
 	public List<Officer> getList(){
-		List<Officer> temp = new ArrayList<Officer>();
-		for(int i = 0;i < cnt ;i++) {
-			temp.add(OFFICERS.get(i));
-		}
-		return temp;
+		return OFFICERS;
 	}
 	
+	private boolean removeRecord(String toRemove) throws Exception {
+		//OFFICERS
+//		FileWriter fw = new FileWriter("OfficerDatabase.txt", true); 
+//		BufferedWriter bw = new BufferedWriter(fw); 
+//		PrintWriter pw = new PrintWriter(bw); 
+//		pw.println(ID+","+Password); 
+//		pw.flush(); 
+//		pw.close();
+		
+		File inputFile = new File("OfficerDatabase.txt");
+		File tempFile = new File("TempFile.txt");
+
+		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+		String currentLine;
+
+		while((currentLine = reader.readLine()) != null) {
+		    // trim newline when comparing with lineToRemove
+		    //String trimmedLine = currentLine.trim();
+		    if(currentLine.equals(toRemove)) {
+		    	continue;
+		    }
+		    
+		    writer.write(currentLine + System.getProperty("line.separator"));
+		}
+		writer.close(); 
+		reader.close(); 
+		boolean successful = tempFile.renameTo(inputFile);
+		return successful;
+	}
 }

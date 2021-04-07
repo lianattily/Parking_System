@@ -53,6 +53,9 @@ public class Officer implements User {
 	}
 	
 	public void SaveRecord(String ID, boolean b, PaymentStatus paymentStatus) throws IOException {
+		for(ParkingSpot s: Spots) {
+			if(s.getID().equals(ID)) return;
+		}
 		String avail="Booked";
 		if(b) {
 			avail ="Available";
@@ -60,7 +63,7 @@ public class Officer implements User {
 		FileWriter fw = new FileWriter("Parkingdatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(ID+","+avail+","+paymentStatus.toString()); 
+		pw.println(ID+","+avail+","+paymentStatus.toString()+","+"N/A"); 
 		pw.flush(); 
 		pw.close();
 		

@@ -20,7 +20,7 @@ public class Main extends Application {
 			controller.init(primaryStage);
 
 			Scene scene = new Scene(root);
-
+			primaryStage.getIcons().add(new Image("https://cdn.dribbble.com/users/2449441/screenshots/6113182/parkit_app_icon.png"));
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Parking Booking System");
 			//primaryStage.setResizable(false);

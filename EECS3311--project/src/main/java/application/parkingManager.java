@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -52,11 +54,15 @@ public class parkingManager implements Initializable{
 	private TableColumn<ParkingSpot, String> paymentCol;
 	@FXML
 	private TableColumn<ParkingSpot, String> availCol;
+	@FXML
+	private TableColumn<ParkingSpot, String> requests;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
 		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
+		requests.setCellValueFactory(new PropertyValueFactory<>("request"));
 		tableView.setItems(observableList);
 		try {
 			fill();
@@ -68,16 +74,17 @@ public class parkingManager implements Initializable{
 	}
 	public void fill() throws IOException {
 		tableView.getItems().clear();
+		List<ParkingSpot> bookings = CUSTOMER.ViewBookings();
 		List<ParkingSpot> s = officer.getSpots();
 		for(ParkingSpot ps: s) {
-			if(!tableView.getItems().contains(ps))
-			tableView.getItems().add(ps);
+			if(!tableView.getItems().contains(ps)) {
+				if(bookings.contains(ps)) {
+					
+				}
+				tableView.getItems().add(ps);
+			}
 		}
-		BufferedReader reader  = new BufferedReader(new FileReader("Parkingdatabase.csv"));
-		CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(0).build();
-		List<String[]> line;
-		line = csvReader.readAll();
-			System.out.println(line);
+		
 		}
 	
 	ObservableList<ParkingSpot> observableList = FXCollections.observableArrayList(new ParkingSpot("L9A5G2"));
@@ -86,48 +93,7 @@ public class parkingManager implements Initializable{
 	private JFXTextField NUM;
 	@FXML
 	private JFXTextField LICENSE;
-	
-	@FXML 
-	private Button BOOK;
-	
-	@FXML
-	public void BookSpot() {
-		if(NUM.getText().isEmpty() || LICENSE.getText().isEmpty()) { 
-			Alert alert = new Alert(Alert.AlertType.ERROR); 
-			alert.setHeaderText(null); 
-			alert.setContentText("All fields are required"); 
-			alert.showAndWait(); return; } 
-			//need to make spot unavailable and add it to customer's list
-			ParkingSpot p = new ParkingSpot(NUM.getText());//TODO: need to somehow add start and end times
-			CUSTOMER.bookSpot(p);
-	}
-	
-	
-	@FXML
-	public void BookSpotUI(ActionEvent event) throws IOException {
-		//if(CUSTOMER.getStatus()) {
-		//PopupWindow window = PopupWindow.create(stage, "javafx", Modality.NONE); window.setContent(new Test2());
-		Parent Scene2root = FXMLLoader.load(getClass().getResource("/bookspot.fxml"));
-		Scene AddInfoScene = new Scene(Scene2root);
 
-		//this gets scene information
-		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-		window.setScene(AddInfoScene);
-		window.show();
-	//	}
-	}
-	
-	
-	@FXML
-	public void pay(ActionEvent event) throws IOException {
-		Parent Scene2root = FXMLLoader.load(getClass().getResource("/pay.fxml"));
-		Scene AddInfoScene = new Scene(Scene2root);
-
-		//this gets scene information
-		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-		window.setScene(AddInfoScene);
-		window.show();
-	}
 	
 	@FXML
 	public void logout(ActionEvent event) throws IOException {
@@ -136,6 +102,8 @@ public class parkingManager implements Initializable{
 
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		//window.getIcons().add(new Image("https://www.freeiconspng.com/uploads/directions--cophall-parking-gatwick-22.png"));
+
 		window.setScene(AddInfoScene);
 		window.show();
 	}
@@ -147,6 +115,8 @@ public class parkingManager implements Initializable{
 
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		//window.getIcons().add(new Image("https://www.freeiconspng.com/uploads/directions--cophall-parking-gatwick-22.png"));
+
 		window.setScene(AddInfoScene);
 		window.show();
 	}
@@ -158,7 +128,6 @@ public class parkingManager implements Initializable{
 	
 	private Boolean availability;
 	
-	private int requests;
 	
 	@FXML
 	public void AddSpot(ActionEvent event) throws IOException {
@@ -167,7 +136,7 @@ public class parkingManager implements Initializable{
 		
 		String path = "ParkingDatabase.txt"; 
 		String line = ""; 
-		if(address.getText().isBlank() || address.getText().isEmpty()) {
+		if(address.getText().equals(" ") || address.getText().isEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null); 
 			alert.setContentText("Please enter a real postal code"); 
@@ -202,6 +171,8 @@ public class parkingManager implements Initializable{
 
 			//this gets scene information
 			Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+			//window.getIcons().add(new Image("https://www.freeiconspng.com/uploads/directions--cophall-parking-gatwick-22.png"));
+
 			window.setScene(AddInfoScene);
 			window.show();
 			
@@ -215,6 +186,8 @@ public class parkingManager implements Initializable{
 
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		//window.getIcons().add(new Image("https://www.freeiconspng.com/uploads/directions--cophall-parking-gatwick-22.png"));
+
 		window.setScene(AddInfoScene);
 		window.show();
 		
@@ -226,6 +199,8 @@ public class parkingManager implements Initializable{
 
 		//this gets scene information
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		//window.getIcons().add(new Image("https://cdn.dribbble.com/users/2449441/screenshots/6113182/parkit_app_icon.png"));
+
 		window.setScene(AddInfoScene);
 		window.show();
 	}
@@ -268,4 +243,36 @@ public class parkingManager implements Initializable{
 			e1.printStackTrace();
 		}
 	}
+	
+	@FXML
+	public void GRANT(ActionEvent event) {
+		//change 
+		  try {
+		        // input the (modified) file content to the StringBuffer "input"
+		        BufferedReader file = new BufferedReader(new FileReader("notes.txt"));
+		        StringBuffer inputBuffer = new StringBuffer();
+		        String line;
+
+		        while ((line = file.readLine()) != null) {
+		            //line = ... // replace the line here
+		            inputBuffer.append(line);
+		            inputBuffer.append('\n');
+		        }
+		        file.close();
+
+		        // write the new string with the replaced line OVER the same file
+		        FileOutputStream fileOut = new FileOutputStream("notes.txt");
+		        fileOut.write(inputBuffer.toString().getBytes());
+		        fileOut.close();
+
+		    } catch (Exception e) {
+		        System.out.println("Problem reading file.");
+		    }
+	}
+	@FXML
+	public void CANCEL(ActionEvent event) {
+		//remove booking from customer's list
+		
+	}
+
 }
