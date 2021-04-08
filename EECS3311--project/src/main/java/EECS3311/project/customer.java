@@ -27,27 +27,27 @@ public class customer implements User {
 		init();
 	}
 	private void init() {
-			String path = "BookingsDatabase.txt"; 
-			String line = ""; 
-			try {
-				BufferedReader br  = new BufferedReader(new FileReader(path));
-				while((line = br.readLine())!=null) {
-					String [] values = line.split(",");
-					ParkingSpot s = new ParkingSpot(values[0]);
-					BOOKINGS.add(s);
-					}
-				}
-			catch (Exception e) {
-				
+		String path = "BookingsDatabase.txt"; 
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader(path));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				ParkingSpot s = new ParkingSpot(values[0]);
+				BOOKINGS.add(s);
 			}
-			
+		}
+		catch (Exception e) {
+
+		}
+
 	}
-	
+
 	public boolean getStatus() {
 		return LogInStatus;
 	}
-	
-	
+
+
 	@Override
 	public void CreatAccount(String Fname, String Lname, String email, String Password) {
 		this.Fname=Fname;
@@ -60,7 +60,7 @@ public class customer implements User {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 	/*
 	 * Record customer's info in CustomerDatabase.txt
@@ -83,18 +83,18 @@ public class customer implements User {
 		pw.println(ID+","+PaymentStatus+","+Expiration); 
 		pw.flush(); 
 		pw.close();
-		
-		
+
+
 	}
 
 	@Override
 	public boolean LogIn(String email, String password) {
 		// TODO Auto-generated method stub
 		if(email==this.email && password==this.password)LogInStatus=true;
-		
+
 		return LogInStatus;
 	}
-	
+
 	public boolean bookSpot(ParkingSpot spot) throws IOException {
 		if(BOOKINGS.size()>=3) return false;
 		Officer o = new Officer();
@@ -108,21 +108,21 @@ public class customer implements User {
 		}
 		return false;
 	}
-	
+
 	public boolean Pay() {
 		PAYMENT.SetPaymentMethod(METHOD);
 		PAYMENT.METHOD=METHOD;
 		return false;
 	}
-	
+
 	public static void setMethod(PaymentMethod m) {
 		METHOD=m;
 	}
-	
+
 	public List<ParkingSpot> ViewBookings() {
 		return BOOKINGS;
 	}
-	
+
 	public boolean CancelBookings(String ID) throws Exception {
 		/**
 		 * Booking does not exist
@@ -137,33 +137,57 @@ public class customer implements User {
 		return false;
 	}
 	private boolean removeRecord(String toRemove) throws Exception {
-		File inputFile = new File("BookingsDatabase.txt");
-		File tempFile = new File("TempFile.txt");
+		for (int i = 0; i < BOOKINGS.size(); i++) {
+			ParkingSpot filter = BOOKINGS.get(i);
 
-		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-		BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+			System.out.println("SIZE OF LIST BEFORE REMOVING  = "+BOOKINGS.size());
+			if (filter.ID.equalsIgnoreCase(toRemove)){//equalsIgnoreCase("bbb")) {
+				System.out.println("removing: "+filter.ID);
+				BOOKINGS.remove(i);
 
-		String currentLine;
-
-		while((currentLine = reader.readLine()) != null) {
-		    // trim newline when comparing with lineToRemove
-		    String trimmedLine = currentLine.trim();
-		    if(trimmedLine.equals(toRemove)) continue;
-		    writer.write(currentLine + System.getProperty("line.separator"));
+				System.out.println("SIZE OF LIST AFTER REMOVING = "+BOOKINGS.size());
+			}
 		}
-		writer.close(); 
-		reader.close(); 
-		boolean successful = tempFile.renameTo(inputFile);
-		return successful;
+		System.out.println("SIZE OF LIST = "+BOOKINGS.size());
+		FileWriter fw = new FileWriter("BookingsDatabase.txt", true); 
+		BufferedWriter bw = new BufferedWriter(fw); 
+		PrintWriter pw = new PrintWriter(bw); 
+		for(ParkingSpot s: BOOKINGS) {
+			System.out.println("RE WRITING : "+s.ID);
+			pw.println(s.ID+","+s.stat+","+s.EndHour); 
+		}
+
+		pw.flush(); 
+		pw.close();
+		return true;
+
+		//		File inputFile = new File("BookingsDatabase.txt");
+		//		File tempFile = new File("TempFile.txt");
+		//
+		//		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+		//		BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+		//
+		//		String currentLine;
+		//
+		//		while((currentLine = reader.readLine()) != null) {
+		//		    // trim newline when comparing with lineToRemove
+		//		    String trimmedLine = currentLine.trim();
+		//		    if(trimmedLine.equals(toRemove)) continue;
+		//		    writer.write(currentLine + System.getProperty("line.separator"));
+		//		}
+		//		writer.close(); 
+		//		reader.close(); 
+		//		boolean successful = tempFile.renameTo(inputFile);
+		//return successful;
 	}
 	public void accept() {
-		
+
 	}
 
 	public Integer getRate() {
 		ParkingSpot s = BOOKINGS.get(0);
 		return s.CalculatePayment();
 	}
-	
-	
+
+
 }
