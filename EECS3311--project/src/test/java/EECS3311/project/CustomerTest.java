@@ -24,8 +24,10 @@ public class CustomerTest {
 	
 	@Test
 	public void BookSpot() throws IOException {
-		ParkingSpot s = new ParkingSpot("N5A 0C1", "TOR2020", 12, 13);
-		assertEquals(customer.bookSpot(s), true);
+		ParkingSpot s = new ParkingSpot("N5A 0C1", "TOR2020", 12,15, 13,30);
+		Officer o = new Officer();
+		o.AddSpot(s.ID,5);
+		assertEquals(customer.bookSpot(s.ID,s), true);
 		assertNotEquals(customer.ViewBookings().size(),0);
 	}
 	

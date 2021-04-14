@@ -12,15 +12,18 @@
    <children>
       <VBox prefHeight="510.0" prefWidth="710.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="bookingView" prefHeight="510.0" prefWidth="710.0">
+            <TableView fx:id="bookingView" prefHeight="510.0" prefWidth="710.0" stylesheets="@application.css">
                <columns>
                   <TableColumn fx:id="bookingCol" prefWidth="75.0" text="Parking Spot" />
                   <TableColumn fx:id="paymentCol" prefWidth="75.0" text="Payment Status" />
-                  <TableColumn fx:id="availCol" prefWidth="75.0" text="Expiration" />
+                  <TableColumn fx:id="expCol" prefWidth="75.0" text="Expiration" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
             </TableView>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>

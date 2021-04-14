@@ -59,15 +59,15 @@ public class adminController  implements Initializable{
 	private TableColumn<ParkingSpot, String> paymentCol;
 	@FXML
 	private TableColumn<ParkingSpot, String> availCol;
-	
+
 	@FXML 
 	private TableView<Officer> officersView;
 	@FXML
 	private TableColumn<Officer, String> officerID;
-    
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-       // mapView.addMapInializedListener(this);
+		// mapView.addMapInializedListener(this);
 
 		officerID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		//officersView.setItems(officerList);
@@ -82,7 +82,7 @@ public class adminController  implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void fill() throws IOException {
@@ -90,9 +90,9 @@ public class adminController  implements Initializable{
 		List<ParkingSpot> s = officer.getSpots();
 		for(ParkingSpot ps: s) {
 			if(!tableView.getItems().contains(ps))
-			tableView.getItems().add(ps);
+				tableView.getItems().add(ps);
 		}
-		
+
 		//FILL OFFICERS TABLE VIEW
 		officersView.getItems().clear();
 		List<Officer> o = admin.getList();
@@ -101,15 +101,15 @@ public class adminController  implements Initializable{
 			if(!officersView.getItems().contains(of))
 				officersView.getItems().add(of);
 		}
-		
+
 	}
-	
-	
+
+
 	@FXML
 	public void UpdatePayment(ActionEvent event) {
 		//admin.ChangePaymentStatus();	
 	}
-	
+
 	@FXML
 	public void AddOfficer(ActionEvent event) throws IOException {
 		if(admin.AddOfficer(ID.getText(),password.getText())) {
@@ -126,17 +126,17 @@ public class adminController  implements Initializable{
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	public void RemoveOfficer(ActionEvent event) throws Exception {
 
-		if(officersView.getSelectionModel().getSelectedItem()!=null) {
+		if(officersView.getSelectionModel().getSelectedItem()!=null && admin.RemoveOfficer(officersView.getSelectionModel().getSelectedItem().getID())) {
 			System.out.println("HERE");
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setHeaderText(null); 
 			alert.setContentText("Officer removed successfully"); 
 			alert.showAndWait();
-			admin.RemoveOfficer(officersView.getSelectionModel().getSelectedItem().getID());
+			
 			fill();
 		}
 		else {
@@ -146,7 +146,7 @@ public class adminController  implements Initializable{
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	public void RETURN(ActionEvent event) throws IOException {
 		Parent Scene2root = FXMLLoader.load(getClass().getResource("/EnterAs.fxml"));
@@ -156,10 +156,10 @@ public class adminController  implements Initializable{
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		window.setScene(AddInfoScene);
 		window.getIcons().add(new Image(""));
-		
+
 		window.show();
 	}
-	
+
 	@FXML
 	public void update(ActionEvent event) throws IOException {
 		if(tableView.getSelectionModel().getSelectedItem()==null) {
@@ -177,7 +177,7 @@ public class adminController  implements Initializable{
 				alert.showAndWait();
 				fill();
 			}
-					break;
+			break;
 			default: 
 			}
 		}

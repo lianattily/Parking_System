@@ -63,7 +63,7 @@ public class parkingManager implements Initializable{
 		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
 		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
 		requests.setCellValueFactory(new PropertyValueFactory<>("request"));
-		tableView.setItems(observableList);
+		//tableView.setItems(observableList);
 		try {
 			fill();
 		} catch (IOException e) {
@@ -87,7 +87,6 @@ public class parkingManager implements Initializable{
 		
 		}
 	
-	ObservableList<ParkingSpot> observableList = FXCollections.observableArrayList(new ParkingSpot("L9A5G2"));
 	
 	@FXML
 	private JFXTextField NUM;
@@ -121,7 +120,7 @@ public class parkingManager implements Initializable{
 		window.show();
 	}
 	@FXML
-	private TextField address;
+	private TextField address,rate;
 	@FXML
 	private AnchorPane rootPane;
 	
@@ -132,16 +131,17 @@ public class parkingManager implements Initializable{
 	@FXML
 	public void AddSpot(ActionEvent event) throws IOException {
 		//ADD NEW SPOT
+		if(address.getText().isEmpty() || rate.getText().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("All fields are required"); 
+			alert.showAndWait();
+			return;
+		}
 		Boolean found = false;
 		
 		String path = "ParkingDatabase.txt"; 
 		String line = ""; 
-		if(address.getText().equals(" ") || address.getText().isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null); 
-			alert.setContentText("Please enter a real postal code"); 
-			alert.showAndWait();
-		
 		try {
 			BufferedReader br  = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!=null) {
@@ -149,10 +149,10 @@ public class parkingManager implements Initializable{
 				System.out.println(values[0]);
 				if(values[0].equals(address.getText())) {
 					found = true;
-					Alert alerrt = new Alert(Alert.AlertType.ERROR);
-					alerrt.setHeaderText(null); 
-					alerrt.setContentText("Could not add Parking spot because it already exists"); 
-					alerrt.showAndWait();
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null); 
+					alert.setContentText("Could not add Parking spot because it already exists"); 
+					alert.showAndWait();
 				}
 			}
 		}
@@ -160,21 +160,19 @@ public class parkingManager implements Initializable{
 			System.out.println("Parking spot adding Checking exception");
 		}
 		if(!found) {
-			ParkingSpot spot = officer.AddSpot(address.getText());
-			Alert alertt = new Alert(Alert.AlertType.INFORMATION);
-			fill();
-			alertt.setHeaderText(null); 
-			alertt.setContentText("Parking spot added successfully"); 
-			alertt.showAndWait();
+			ParkingSpot spot = officer.AddSpot(address.getText(),Integer.parseInt(rate.getText()));
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText(null); 
+			alert.setContentText("Parking spot added successfully"); 
+			alert.showAndWait();
 			Parent Scene2root = FXMLLoader.load(getClass().getResource("/officer.fxml"));
 			Scene AddInfoScene = new Scene(Scene2root);
 
 			//this gets scene information
 			Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-			//window.getIcons().add(new Image("https://www.freeiconspng.com/uploads/directions--cophall-parking-gatwick-22.png"));
-
 			window.setScene(AddInfoScene);
 			window.show();
+		}
 			
 		}
 		}
@@ -223,7 +221,7 @@ public class parkingManager implements Initializable{
 	}
 	
 	@FXML
-	public void RemoveSpot(ActionEvent event) {
+	public void RemoveSpot(ActionEvent event) throws Exception {
 		System.out.println("BEFORE");
 		List<ParkingSpot> t = officer.getSpots();
 		for(ParkingSpot e: t) {

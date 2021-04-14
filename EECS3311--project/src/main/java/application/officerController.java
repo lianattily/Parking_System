@@ -35,7 +35,7 @@ public class officerController implements Initializable {
 	}
 	
 	@FXML
-	private TextField address;
+	private TextField address,rate;
 	@FXML
 	private AnchorPane rootPane;
 	
@@ -47,6 +47,13 @@ public class officerController implements Initializable {
 	@FXML
 	public void AddSpot(ActionEvent event) throws IOException {
 		//ADD NEW SPOT
+		if(address.getText().isEmpty() || rate.getText().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("All fields are required"); 
+			alert.showAndWait();
+			return;
+		}
 		Boolean found = false;
 		
 		String path = "ParkingDatabase.txt"; 
@@ -69,7 +76,7 @@ public class officerController implements Initializable {
 			System.out.println("Parking spot adding Checking exception");
 		}
 		if(!found) {
-			ParkingSpot spot = officer.AddSpot(address.getText());
+			ParkingSpot spot = officer.AddSpot(address.getText(),Integer.parseInt(rate.getText()));
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText(null); 
 			alert.setContentText("Parking spot added successfully"); 

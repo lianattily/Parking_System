@@ -42,7 +42,7 @@ public class customerController implements Initializable{
 	private TableView<ParkingSpot> bookingView;
 	
 	@FXML
-	private TableColumn<ParkingSpot, String> requestcol, paymentCol, availCol;
+	private TableColumn<ParkingSpot, String> requestcol, rateCol;
 	
 	@FXML
 	private ComboBox<String> from, until;
@@ -50,6 +50,7 @@ public class customerController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+		rateCol.setCellValueFactory(new PropertyValueFactory<>("Rate"));
 		try {
 			fill();
 		} catch (IOException e) {
@@ -84,20 +85,14 @@ public class customerController implements Initializable{
 			alert.setContentText("All fields are required"); 
 			alert.showAndWait(); return; } 
 			//need to make spot unavailable and add it to customer's list
-			ParkingSpot p = new ParkingSpot(NUM.getText());//TODO: need to somehow add start and end times
-			CUSTOMER.bookSpot(p);
+			//ParkingSpot p = new ParkingSpot(NUM.getText(),Integer.parseInt(F));//TODO: need to somehow add start and end times
+			
 	}
 	
 	
 	@FXML
 	public void BookSpotUI(ActionEvent event) throws IOException {
-//		if(bookingView.getSelectionModel().getSelectedItem()==null) {
-//			Alert alert = new Alert(Alert.AlertType.ERROR);
-//			alert.setHeaderText(null); 
-//			alert.setContentText("Please select an available spot to book"); 
-//			alert.showAndWait();
-//		}
-//		else {
+
 		Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("/bookspot.fxml"));
@@ -109,7 +104,7 @@ public class customerController implements Initializable{
         catch (IOException e) {
             e.printStackTrace();
         }
-		//}
+		
 	}
 	
 	
@@ -152,18 +147,18 @@ public class customerController implements Initializable{
 	}
 	@FXML
 	public void cancelBooking(ActionEvent event) throws Exception {
-		if(CUSTOMER.CancelBookings(bookingView.getSelectionModel().getSelectedItem().getID())) {
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setHeaderText(null); 
-			alert.setContentText("Cancelling was successful"); 
-			alert.showAndWait();
-		}
-		else {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null); 
-			alert.setContentText("Could not cancel booking"); 
-			alert.showAndWait();
-		}
+//		if(CUSTOMER.CancelBookings(bookingView.getSelectionModel().getSelectedItem().getID())) {
+//			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//			alert.setHeaderText(null); 
+//			alert.setContentText("Cancelling was successful"); 
+//			alert.showAndWait();
+//		}
+//		else {
+//			Alert alert = new Alert(Alert.AlertType.ERROR);
+//			alert.setHeaderText(null); 
+//			alert.setContentText("Could not cancel booking"); 
+//			alert.showAndWait();
+//		}
 	}
 	
 	

@@ -22,7 +22,7 @@ public class viewBooking implements Initializable{
 	private TableView<ParkingSpot> bookingView;
 
 	@FXML
-	private TableColumn<ParkingSpot, String> bookingCol, paymentCol, availCol;
+	private TableColumn<ParkingSpot, String> bookingCol, paymentCol, expCol;
 
 	@FXML
 	private ComboBox<String> from, until;
@@ -31,7 +31,7 @@ public class viewBooking implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		bookingCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
-		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
+		expCol.setCellValueFactory(new PropertyValueFactory<>("Exp"));
 		try {
 			fill();
 		} catch (IOException e) {
@@ -53,10 +53,12 @@ public class viewBooking implements Initializable{
 	@FXML
 	public void cancelBooking(ActionEvent event) throws Exception {
 		if(CUSTOMER.CancelBookings(bookingView.getSelectionModel().getSelectedItem().getID())) {
+			fill();
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setHeaderText(null); 
 			alert.setContentText("Cancelling was successful"); 
 			alert.showAndWait();
+			
 		}
 		else {
 			Alert alert = new Alert(Alert.AlertType.ERROR);

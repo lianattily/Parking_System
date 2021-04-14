@@ -1,9 +1,11 @@
+
 package EECS3311.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +32,9 @@ public class AdminTest {
 	
 	@Test
 	public void UpdatePaymentStatus() throws IOException {
-		ParkingSpot s = new ParkingSpot("L9A5G2");
-		assertEquals(admin.ChangePaymentStatus(s),true);
+		ParkingSpot s = new ParkingSpot("L9A5G2",5);
+		Officer off = new Officer();
+		List<ParkingSpot> spot = off.getSpots();
+		assertEquals(admin.ChangePaymentStatus(spot.get(0)),true);
 	}
 }
