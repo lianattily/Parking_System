@@ -175,8 +175,7 @@ public class parkingManager implements Initializable{
 		}
 			
 		}
-		}
-	}
+		
 	@FXML
 	public void AddSpotOfficer(ActionEvent event) throws IOException {
 		Parent Scene2root = FXMLLoader.load(getClass().getResource("/addSpot.fxml"));
