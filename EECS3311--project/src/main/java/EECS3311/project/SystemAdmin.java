@@ -74,13 +74,15 @@ public class SystemAdmin implements User {
 
 	public boolean AddOfficer(String ID, String password) throws IOException {
 		Officer newOfficer = new Officer(ID, password);
-		if(!OFFICERS.contains(newOfficer)) {
+		for(Officer o: OFFICERS) {
+			System.out.println("checking officer "+o.getID());
+			if(o.getID().equals(ID)) return false;
+		}
+		
 			OFFICERS.add(newOfficer);
 			cnt++;
 			SaveRecord(ID, password);
 			return true;
-		}
-		return false;
 	}
 
 
@@ -98,18 +100,18 @@ public class SystemAdmin implements User {
 
 	public boolean ChangePaymentStatus(ParkingSpot s) throws IOException {
 		s.isPaid= s.isPaid.PAID;
-		boolean success = updateDatabase(s.getID(), s.isPaid.toString(), s.ExpirationTime.toString());
-		return success;
+		
+		return updateDatabase(s.ID);
 
 	}
 
 	/* 
 	 * Update BookingsDatabase when payment status changes
 	 */
-	private boolean updateDatabase(String id,  String PaymentStatus, String Expiration) throws IOException {
+	private boolean updateDatabase(String id) throws IOException {
 		File file = new File("BookingsDatabase.txt");
 		File temp = new File("TempFile.txt");
-		String ID = "", Status = "", Exp = "";  
+		String ID = "", PaymentStatus = "", Expiration = "";  
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
@@ -117,16 +119,18 @@ public class SystemAdmin implements User {
 		x.useDelimiter("[,\n]"); 
 		while(x.hasNext()) { 
 			ID = x.next(); 
-			Status = x.next(); 
-			Exp = x.next();
+			PaymentStatus = x.next(); 
+			Expiration = x.next();
 			System.out.println("ID in line 176 = "+ID+" vs "+ id);
 			if(ID.equals(id)){ 
-				System.out.println("RE WRITING : "+ID+" , "+PaymentStatus+" , "+Expiration);
-				pw.println(ID+ "," + PaymentStatus +"," + Expiration); 
+				System.out.println("RE WRITING : "+ID+" , "+"PAID"+" , "+Expiration);
+				pw.println(ID+ "," + "PAID" +"," + Expiration); 
 			}
 			else {
-				pw.println(ID+ "," + Status +"," + Exp); 
+				System.out.println("KEEPING : "+ID+" , "+PaymentStatus+" , "+Expiration);
+				pw.println(ID+ "," + PaymentStatus +"," + Expiration); 
 			}
+			x.next();
 		}
 		x.close();
 		pw.flush();
@@ -185,8 +189,6 @@ public class SystemAdmin implements User {
 		}else System.out.println("file dont exist");
 
 		File dump = new File(name);
-
-
 		return temp.renameTo(dump);
 	}
 }

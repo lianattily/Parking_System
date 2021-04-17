@@ -24,7 +24,7 @@ public class CustomerTest {
 	
 	@Test
 	public void BookSpot() throws IOException {
-		ParkingSpot s = new ParkingSpot("N5A 0C1", "TOR2020", 12,15, 13,30);
+		ParkingSpot s = new ParkingSpot("N5A0C1", "TOR2020", 12,15, 13,30);
 		Officer o = new Officer();
 		o.AddSpot(s.ID,5);
 		assertEquals(customer.bookSpot(s.ID,s), true);
@@ -32,10 +32,10 @@ public class CustomerTest {
 	}
 	
 	@Test
-	public void PayTest() {
+	public void PayTest() throws Exception {
 		PaymentMethod method = new Debit();
 		customer.setMethod(method);
-		assertEquals(customer.Pay(), true);
+		assertEquals(customer.Pay("N5A0C1"), true);
 	}
 	
 	

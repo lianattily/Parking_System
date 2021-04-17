@@ -94,8 +94,8 @@ public class ParkingSpot {
 		stat = status.toString();
 		return isFilled;
 	}
-	public PaymentStatus getisPaid() {
-		return isPaid;
+	public String getisPaid() {
+		return isPaid.toString();
 	}
 	public String getID() {
 		return ID;

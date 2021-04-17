@@ -3,6 +3,7 @@ package EECS3311.project;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -119,10 +120,11 @@ public class customer implements User {
 		return false;
 	}
 
-	public boolean Pay() {
+	public boolean Pay(String ID) throws Exception {
 		PAYMENT.SetPaymentMethod(METHOD);
 		PAYMENT.METHOD=METHOD;
-		return true;
+		
+		return updateUNPAID(ID);
 	}
 
 	public static void setMethod(PaymentMethod m) {
@@ -131,6 +133,45 @@ public class customer implements User {
 
 	public List<ParkingSpot> ViewBookings() {
 		return BOOKINGS;
+	}
+	
+	private boolean updateUNPAID(String toChange) throws Exception {
+		File file = new File("BookingsDatabase.txt");
+		File temp = new File("TempFile.txt");
+		String ID = "", PaymentStatus = "", Expiration = "";  
+		FileWriter fw = new FileWriter("TempFile.txt",false); 
+		BufferedWriter bw = new BufferedWriter(fw); 
+		PrintWriter pw = new PrintWriter(bw); 
+		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
+		x.useDelimiter("[,\n]"); 
+		while(x.hasNext()) { 
+			ID = x.next(); 
+			PaymentStatus = x.next(); 
+			Expiration = x.next();
+			System.out.println("ID in line 176 = "+ID+" vs "+ toChange);
+			if(ID.equals(toChange)){ 
+				System.out.println("RE WRITING : "+ID+" , "+"PAID"+" , "+Expiration);
+				pw.println(ID+ "," + "PAID" +"," + Expiration); 
+			}
+			else {
+				System.out.println("KEEPING : "+ID+" , "+PaymentStatus+" , "+Expiration);
+				pw.println(ID+ "," + PaymentStatus +"," + Expiration); 
+			}
+			x.next();
+		}
+		x.close();
+		pw.flush();
+		pw.close();
+		fw.close();
+		bw.close();
+		if(file.exists()) {
+			System.out.println("FILE EXISTS"+file.delete());
+		}else System.out.println("file dont exist");
+
+		File dump = new File("BookingsDatabase.txt");
+
+
+		return temp.renameTo(dump);
 	}
 
 	public boolean CancelBookings(String ID) throws Exception {
@@ -195,9 +236,15 @@ public class customer implements User {
 
 	}
 
-	public Integer getRate() {
-		ParkingSpot s = BOOKINGS.get(0);
-		return s.CalculatePayment();
+	public Integer getRate(String ID) {
+		Officer o = new Officer();
+		List<ParkingSpot> list = o.getSpots();
+		for(ParkingSpot sp: list) {
+			if(sp.getID().equals(ID)) {
+				return sp.CalculatePayment();
+			}
+		}
+		return 0;
 	}
 
 

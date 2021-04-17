@@ -39,11 +39,6 @@ public class officerController implements Initializable {
 	@FXML
 	private AnchorPane rootPane;
 	
-	
-	private Boolean availability;
-	
-	private int requests;
-	
 	@FXML
 	public void AddSpot(ActionEvent event) throws IOException {
 		//ADD NEW SPOT
@@ -77,6 +72,7 @@ public class officerController implements Initializable {
 		}
 		if(!found) {
 			ParkingSpot spot = officer.AddSpot(address.getText(),Integer.parseInt(rate.getText()));
+			System.out.println("spot added = "+spot.ID);
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText(null); 
 			alert.setContentText("Parking spot added successfully"); 

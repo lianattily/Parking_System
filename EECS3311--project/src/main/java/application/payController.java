@@ -68,7 +68,7 @@ public class payController implements Initializable {
 	
 	
 	@FXML
-	public void doPay(ActionEvent event) {
+	public void doPay(ActionEvent event) throws Exception {
 		if(tg.getSelectedToggle()!=null) {
 		boolean bad = false;
 		char[] chars = cardholder.getText().toCharArray();
@@ -77,9 +77,9 @@ public class payController implements Initializable {
 	            bad = true;
 	         }
 	      }
-	    
+	    System.out.println("PAYING FOR -> "+bookings.getSelectionModel().getSelectedItem());
 		customer.setMethod(getMethod());
-		if(CUSTOMER.Pay() && !bad) {
+		if(!bad && CUSTOMER.Pay(bookings.getSelectionModel().getSelectedItem()))  {
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText(null); 
 			alert.setContentText("Payment was successful"); 
@@ -147,8 +147,10 @@ public class payController implements Initializable {
 		System.out.println(tgValue);
 		return method;
 	}
+	
+	
 	@FXML
 	public void setAmount(ActionEvent event) {
-		amount.setText("$"+CUSTOMER.getRate().toString());
+		amount.setText("$"+CUSTOMER.getRate(bookings.getSelectionModel().getSelectedItem()));
 	}
 }

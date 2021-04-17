@@ -62,7 +62,10 @@ public class customerController implements Initializable{
 	public void fill() throws IOException {
 		Officer officer = new Officer();
 		bookingView.getItems().clear();
+
 		List<ParkingSpot> cs = officer.getSpots();
+
+		System.out.println("spots list size = "+cs.size());
 		for(ParkingSpot ps: cs) {
 			if(!bookingView.getItems().contains(ps))
 			bookingView.getItems().add(ps);

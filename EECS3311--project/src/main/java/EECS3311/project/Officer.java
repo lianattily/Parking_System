@@ -33,21 +33,25 @@ public class Officer implements User {
 	}
 	
 	private void fill() {
+		System.out.println("officer.java 36 HERE");
 		String path = "ParkingDatabase.txt"; 
 		String line = ""; 
 		try {
 			BufferedReader br  = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!=null) {
 				String [] values = line.split(",");
-				
-				ParkingSpot s = new ParkingSpot(values[0],Integer.parseInt(values[1]));
+				System.out.println(values.length);
+				System.out.println("line = "+line+"   "+Integer.parseInt(values[3]));
+				ParkingSpot s = new ParkingSpot(values[0],Integer.parseInt(values[3]));
 				Spots.add(s);
+				System.out.println("spot = "+s.ID+"  "+s.getRate());
 				}
 			br.close();
 			}
 		catch (Exception e) {
-			
+			System.out.println("EXCEPTION");
 		}
+		System.out.println("in spots size = "+Spots.size());
 	}
 	
 	@Override
@@ -56,18 +60,18 @@ public class Officer implements User {
 		
 	}
 	
-	public void SaveRecord(String ID, boolean b, PaymentStatus paymentStatus) throws IOException {
-		for(ParkingSpot s: Spots) {
-			if(s.getID().equals(ID)) return;
-		}
+	public void SaveRecord(String ID, boolean b, String paymentStatus,String Rate) throws IOException {
+		System.out.println("In save records");
 		String avail="Booked";
 		if(b) {
 			avail ="Available";
 		}
+		System.out.println(avail);
 		FileWriter fw = new FileWriter("Parkingdatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(ID+","+avail+","+paymentStatus.toString()+","+"N/A"); 
+		pw.println(ID+","+avail+","+paymentStatus+","+Rate); 
+		System.out.println("Adding -> "+ID);
 		pw.flush(); 
 		pw.close();
 		bw.close();
@@ -100,8 +104,12 @@ public class Officer implements User {
 	public ParkingSpot AddSpot(String ID, Integer rate) throws IOException {
 		
 		ParkingSpot s = new ParkingSpot(ID,rate);
-		System.out.println(Spots.add(s));
-		SaveRecord(ID, s.getisFilled(), s.getisPaid());
+		System.out.println(Spots.add(s)+"  current spots:");
+		for(ParkingSpot sp: Spots) {
+			System.out.println(sp.getID()+" , "+sp.getRate());
+		}
+		SaveRecord(ID, s.getisFilled(), s.getisPaid(), rate.toString());
+		
 		return s;
 	}
 	

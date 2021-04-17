@@ -29,6 +29,7 @@ import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import EECS3311.project.Officer;
 import EECS3311.project.ParkingSpot;
 import EECS3311.project.SystemAdmin;
+import EECS3311.project.customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,6 +49,7 @@ import javafx.stage.Stage;
 public class adminController  implements Initializable{
 	Officer officer = new Officer();
 	SystemAdmin admin = new SystemAdmin();
+	customer customer = new customer();
 	@FXML
 	private ComboBox<String> status;
 	@FXML private JFXTextField ID, password;
@@ -87,7 +89,7 @@ public class adminController  implements Initializable{
 
 	public void fill() throws IOException {
 		tableView.getItems().clear();
-		List<ParkingSpot> s = officer.getSpots();
+		List<ParkingSpot> s = customer.ViewBookings();
 		for(ParkingSpot ps: s) {
 			if(!tableView.getItems().contains(ps))
 				tableView.getItems().add(ps);
@@ -136,7 +138,6 @@ public class adminController  implements Initializable{
 			alert.setHeaderText(null); 
 			alert.setContentText("Officer removed successfully"); 
 			alert.showAndWait();
-			
 			fill();
 		}
 		else {
