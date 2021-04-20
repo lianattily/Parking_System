@@ -44,8 +44,6 @@ public class customerController implements Initializable{
 	@FXML
 	private TableColumn<ParkingSpot, String> requestcol, rateCol;
 	
-	@FXML
-	private ComboBox<String> from, until;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -87,9 +85,7 @@ public class customerController implements Initializable{
 			alert.setHeaderText(null); 
 			alert.setContentText("All fields are required"); 
 			alert.showAndWait(); return; } 
-			//need to make spot unavailable and add it to customer's list
-			//ParkingSpot p = new ParkingSpot(NUM.getText(),Integer.parseInt(F));//TODO: need to somehow add start and end times
-			
+
 	}
 	
 	

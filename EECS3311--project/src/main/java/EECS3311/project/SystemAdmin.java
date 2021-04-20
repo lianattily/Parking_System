@@ -17,7 +17,6 @@ public class SystemAdmin implements User {
 	private String email, password;
 	private boolean LogInStatus;
 	private List<Officer> OFFICERS; //initialize with entries in database
-	private Integer cnt = 0;
 
 	//constructor
 	public SystemAdmin() {
@@ -52,12 +51,12 @@ public class SystemAdmin implements User {
 	}
 
 	public void SaveRecord(String ID, String Password) throws IOException {
-		for(Officer o: OFFICERS) {
-			if(o.getID().equals(ID)) return;
-		}
 		FileWriter fw = new FileWriter("OfficerDatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
+		Officer temp = new Officer(ID,Password);
+		OFFICERS.add(temp);
+		System.out.println("ADDING "+ID+"   "+Password);
 		pw.println(ID+","+Password); 
 		pw.flush(); 
 		pw.close();
@@ -80,7 +79,6 @@ public class SystemAdmin implements User {
 		}
 		
 			OFFICERS.add(newOfficer);
-			cnt++;
 			SaveRecord(ID, password);
 			return true;
 	}
@@ -88,10 +86,9 @@ public class SystemAdmin implements User {
 
 	public boolean RemoveOfficer(String ID) throws Exception {
 
-		for(int i=0;i<cnt;i++) {
+		for(int i=0;i<OFFICERS.size();i++) {
 			if(OFFICERS.get(i).getID().equals(ID)) {
 				OFFICERS.remove(i);
-				cnt--;
 				return removeRecord(ID);
 			}
 		}

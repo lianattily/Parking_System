@@ -1,16 +1,21 @@
 package EECS3311.project;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class ParkingSpot {
 	//private final int rate= 5;
 	boolean isFilled;
-	ParkingRate rate = new ParkingRate();
+	public ParkingRate rate = new ParkingRate();
 	PaymentStatus isPaid;
-	int StartHour, StartMin, EndHour, EndMinute;
+	public int StartHour, StartMin, EndHour, EndMinute;
 	Integer ExpirationTime;
 	ParkingSpotStatus status;
 	String LicensePlate;
 	public String ID;
 	public String avail, stat;
+	LocalDate date;
 	/**
 	 * Constructor for adding by ID (default settings, no expiration date)
 	 */
@@ -26,11 +31,13 @@ public class ParkingSpot {
 	/*
 	 * Constructor for customer with start and end times, license plate
 	 */
-	public ParkingSpot(String spacenum,String license,int startH, int startM, int endH, int endM) {
+	public ParkingSpot(String spacenum,String license,String status, int startH, int startM, int endH, int endM, LocalDate localDate, int rate) {
 		ID = spacenum;
+		this.status=this.status.PENDING;
 		isFilled=true;
-		isPaid=isPaid.UNPAID;
-		status=status.FILLED;
+		if(status.equals("UNPAID")) {
+			isPaid = isPaid.UNPAID;
+		}else isPaid = isPaid.PAID;
 		StartHour=startH;
 		StartMin = startM;
 		EndHour  = endH ;
@@ -38,23 +45,11 @@ public class ParkingSpot {
 		ExpirationTime = endH;
 		stat=status.toString();
 		avail = isPaid.toString();
-		ID = spacenum;
 		LicensePlate=license;
 		System.out.println("END HR = "+ExpirationTime);
-		
+		this.date=localDate;
+		this.rate.setRate(rate);
 	}
-
-	public ParkingSpot(String id, String status, int endH, int endM) {
-		ID=id;
-		if(status.equals("UNPAID")) {
-			isPaid = isPaid.UNPAID;
-		}else isPaid = isPaid.PAID;
-		EndHour  = endH ;
-		EndMinute = endM;
-		ExpirationTime = endH;
-		
-	}
-
 
 	public boolean isFilled() {
 		if(status==ParkingSpotStatus.AVAILABLE) {
@@ -107,8 +102,10 @@ public class ParkingSpot {
 		return avail;
 	}
 	public String getExp() {
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String strDate = dateFormat.format(date);
 		System.out.println(String.valueOf(EndHour)+":"+String.valueOf(EndMinute));
-		String s = String.valueOf(EndHour)+":"+String.valueOf(EndMinute);
+		String s = String.valueOf(EndHour)+":"+String.valueOf(EndMinute)+"   "+ strDate;
 		return s;
 	}
 	
@@ -116,4 +113,5 @@ public class ParkingSpot {
 		String s = "$"+ String.valueOf(rate.getRate());
 		return s;
 	}
+	
 }

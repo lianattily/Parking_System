@@ -15,8 +15,8 @@ public class AdminTest {
 	@Test
 	public void Login() {
 		assertEquals(admin.LogIn("MASTER", "MASTERLOGIN!"), true);
-		assertEquals(admin.getID(),"MASTER");
-		assertEquals(admin.getPASS(),"MASTERLOGIN!");
+		assertEquals(admin.getID().equals("MASTER"),true);
+		assertEquals(admin.getPASS().equals("MASTERLOGIN!"),true);
 		assertNotEquals(admin.getList().size(),0);
 	}
 	

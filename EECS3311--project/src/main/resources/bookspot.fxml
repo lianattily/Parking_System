@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,25 +12,25 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.layout.HBox?>
 
-<AnchorPane prefHeight="263.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.bookingController">
+<AnchorPane prefHeight="363.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.bookingController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="207.0" layoutY="113.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="207.0" layoutY="113.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <JFXComboBox fx:id="options" focusColor="#bcab79" prefHeight="25.0" prefWidth="489.0" promptText="Available Spots (Postal Code)" unFocusColor="#bcab79">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXComboBox>
-            <JFXTextField fx:id="NUM" focusColor="#bcab79" promptText="Parking space number (Postal Code)" unFocusColor="#bcab79">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-            </JFXTextField>
             <JFXTextField fx:id="LICENSE" focusColor="#bcab79" promptText="License plate number" unFocusColor="#bcab79">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </JFXTextField>
+            <DatePicker fx:id="date" prefHeight="25.0" prefWidth="413.0" promptText="Pick a booking date">
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </DatePicker>
             <HBox alignment="CENTER" prefHeight="18.0" prefWidth="400.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="From:">
@@ -86,7 +87,15 @@
                      </padding>
                   </JFXTextField>
                </children></HBox>
-            <HBox alignment="CENTER" prefHeight="151.0" prefWidth="400.0">
+            <Label text="Please use 24HR format (i.e, 2PM is 14:00)">
+               <font>
+                  <Font name="System Italic" size="9.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="199.0" prefWidth="400.0">
                <children>
                   <JFXButton buttonType="RAISED" onAction="#BookSpot" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #2978A0;" text="Book spot" textFill="#bcab79">
                      <HBox.margin>
@@ -96,7 +105,7 @@
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="cancel" buttonType="RAISED" onAction="#customerUI" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #BCAB79;" text="Cancel">
+                  <JFXButton fx:id="close" buttonType="RAISED" onAction="#customerUI" prefHeight="78.0" prefWidth="200.0" style="-fx-background-color: #BCAB79;" text="Cancel">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>

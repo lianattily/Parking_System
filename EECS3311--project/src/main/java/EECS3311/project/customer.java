@@ -9,7 +9,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -31,18 +36,24 @@ public class customer implements User {
 	private void init() {
 		String path = "BookingsDatabase.txt"; 
 		String line = ""; 
+		String date;
 		try {
 			BufferedReader br  = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!=null) {
 				String [] values = line.split(",");
-				ParkingSpot s = new ParkingSpot(values[0],values[1],Integer.parseInt(values[2]),Integer.parseInt(values[3]));
-				BOOKINGS.add(s);
+				date = values[7];
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				//convert String to LocalDate
+				  LocalDate localDate = LocalDate.parse(date, formatter);
+				//spot.ID+","+spot.LicensePlate+","+spot.stat+","+spot.StartHour+","+spot.StartMin+","+spot.EndHour+","+spot.EndMinute+","+strDate
+				ParkingSpot s = new ParkingSpot(values[0],values[1],values[2], Integer.parseInt(values[3]),Integer.parseInt(values[4]),Integer.parseInt(values[5]),Integer.parseInt(values[6]), localDate,Integer.parseInt(values[8]));
+				System.out.println("adding "+BOOKINGS.add(s));
 			}
 			br.close();
 		}
 		catch (Exception e) {
 
-		}
+		}System.out.println("customers booking initializing size = "+BOOKINGS.size());
 
 
 	}
@@ -82,16 +93,18 @@ public class customer implements User {
 	/*
 	 * Record booking in BookingsDatabase.txt
 	 */
-	private void SaveBooking(String ID, String PaymentStatus, String Expiration, String min) throws IOException {
+	private void SaveBooking(ParkingSpot spot) throws IOException {
 		FileWriter fw = new FileWriter("BookingsDatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		pw.println(ID+","+PaymentStatus+","+Expiration+","+min); 
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String strDate = dateFormat.format(spot.date);  
+		System.out.println("in save booking date = "+strDate);
+		pw.println(spot.ID+","+spot.LicensePlate+","+spot.stat+","+spot.StartHour+","+spot.StartMin+","+spot.EndHour+","+spot.EndMinute+","+strDate+","+spot.rate.getRate()); 
 		pw.flush(); 
 		pw.close();
 		bw.close();
 		fw.close();
-
 
 	}
 
@@ -105,14 +118,20 @@ public class customer implements User {
 
 	public boolean bookSpot(String ID,ParkingSpot spot) throws IOException {
 		if(BOOKINGS.size()>=3) return false;
+		customer cust = new customer();
 		System.out.println("LOOKING FOR SPOT : "+ID);
 		Officer o = new Officer();
 		List<ParkingSpot> s = o.getSpots();
+		List<ParkingSpot> c = cust.ViewBookings();
+		for(ParkingSpot spot1: c) {
+			if(spot1.ID.equals(ID)) return false;
+		}
 		for(ParkingSpot sp: s) {
 			if(sp.getID().equals(ID)) {
 				System.out.println("BOOKING in customer : "+sp.getID());
 				BOOKINGS.add(spot);
-				SaveBooking(ID,spot.isPaid.toString(), spot.ExpirationTime.toString(), String.valueOf(spot.EndMinute));
+				SaveBooking(spot);
+				//SaveBooking(ID,spot.isPaid.toString(), spot.LicensePlate, spot.ExpirationTime.toString(), String.valueOf(spot.EndMinute),spot.date.toString());
 				return true;
 			}
 		}
@@ -138,7 +157,7 @@ public class customer implements User {
 	private boolean updateUNPAID(String toChange) throws Exception {
 		File file = new File("BookingsDatabase.txt");
 		File temp = new File("TempFile.txt");
-		String ID = "", PaymentStatus = "", Expiration = "";  
+		String ID = "", PaymentStatus = "", Expiration = "", license = "";  
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
@@ -146,6 +165,7 @@ public class customer implements User {
 		x.useDelimiter("[,\n]"); 
 		while(x.hasNext()) { 
 			ID = x.next(); 
+			license = x.next();
 			PaymentStatus = x.next(); 
 			Expiration = x.next();
 			System.out.println("ID in line 176 = "+ID+" vs "+ toChange);

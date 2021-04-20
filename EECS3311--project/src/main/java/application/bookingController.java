@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -29,18 +30,30 @@ public class bookingController implements Initializable{
 	private ComboBox<String> options;
 	@FXML
 	private JFXTextField Fhour, Fmin, Thour, Tmin;
+	@FXML
+	private DatePicker date;
 	String[] availableSpots;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Officer o = new Officer();
 		List<ParkingSpot> list = o.getSpots();
+	
 		for(ParkingSpot s: list) {
-			if(!s.isFilled()) {
-				options.getItems().add(s.ID);
-			}
+			options.getItems().add(s.ID);
+				
 		}
 	}
 
+	private int getRate() {
+		Officer o = new Officer();
+		List<ParkingSpot> list = o.getSpots();
+		for(ParkingSpot s: list) {
+			if(s.getID().equals(options.getSelectionModel().getSelectedItem()))
+				return s.rate.getRate();
+		}
+		return 0;
+	}
+	
 	@FXML
 	private JFXTextField NUM;
 	@FXML
@@ -51,20 +64,23 @@ public class bookingController implements Initializable{
 	customer CUSTOMER = new customer();
 	@FXML
 	public void BookSpot() throws IOException {
-		if(options.getSelectionModel().getSelectedItem()==null || LICENSE.getText().isEmpty()) { 
+		if(options.getSelectionModel().getSelectedItem()==null || LICENSE.getText().isEmpty() || date.getValue()==null) { 
 			Alert alert = new Alert(Alert.AlertType.ERROR); 
 			alert.setHeaderText(null); 
 			alert.setContentText("All fields are required"); 
 			alert.showAndWait(); return; 
 		}
+		System.out.println("Booking date = "+date.getValue());
 		System.out.println(Integer.parseInt(Fhour.getText())+" " +Integer.parseInt(Fmin.getText())+"   " +Integer.parseInt(Thour.getText())+"   " +Integer.parseInt(Tmin.getText()));
-		ParkingSpot p = new ParkingSpot(options.getSelectionModel().getSelectedItem(), LICENSE.getText(),Integer.parseInt(Fhour.getText()), Integer.parseInt(Fmin.getText()),Integer.parseInt(Thour.getText()), Integer.parseInt(Tmin.getText()));
+		ParkingSpot p = new ParkingSpot(options.getSelectionModel().getSelectedItem(), LICENSE.getText(),"UNPAID",Integer.parseInt(Fhour.getText()), Integer.parseInt(Fmin.getText()),Integer.parseInt(Thour.getText()), Integer.parseInt(Tmin.getText()),date.getValue(), getRate());
 		if(CUSTOMER.bookSpot(options.getSelectionModel().getSelectedItem(),p)) {
 			//TODO: change to "REQUESTED" 
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
 			alert.setHeaderText(null); 
 			alert.setContentText(options.getSelectionModel().getSelectedItem()+" Booked successfully until: "+Thour.getText()+":"+Tmin.getText()); 
 			alert.showAndWait();
+			Stage stage = (Stage) close.getScene().getWindow();
+			stage.close();
 		}
 		else {
 			Alert alert = new Alert(Alert.AlertType.ERROR); 

@@ -2,7 +2,10 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -32,11 +35,7 @@ import javafx.scene.control.Label;
 
 
 public class payController implements Initializable {
-	ParkingSpot s;
-	public void setS(ParkingSpot p) {
-		s=p;
-	}
-	
+
 	@FXML
 	private ToggleGroup tg;
 	
@@ -134,7 +133,6 @@ public class payController implements Initializable {
 		
 	}
 	
-	
 	public PaymentMethod getMethod() {
 		PaymentMethod method ;
 		RadioButton selectedRadioButton = (RadioButton) tg.getSelectedToggle();
@@ -150,7 +148,29 @@ public class payController implements Initializable {
 	
 	
 	@FXML
-	public void setAmount(ActionEvent event) {
-		amount.setText("$"+CUSTOMER.getRate(bookings.getSelectionModel().getSelectedItem()));
+	public void setAmount(ActionEvent event) throws ParseException {
+		ParkingSpot spot;
+		String time1;
+		String time2;
+		List<ParkingSpot> list = CUSTOMER.ViewBookings();
+		
+		for(ParkingSpot s: list) {
+			if(s.getID().equals(bookings.getSelectionModel().getSelectedItem())){
+				System.out.println("calculating spot -> "+s.getID());
+				spot = s;
+				time1= spot.StartHour+":"+spot.StartMin;
+				time2= spot.EndHour+":"+spot.EndMinute;
+				SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+				Date date1 = format.parse(time1);
+				Date date2 = format.parse(time2);
+				long difference = date2.getTime() - date1.getTime();
+				System.out.println("time difference  = "+difference);
+				difference*=spot.rate.getRate();
+				amount.setText("$"+difference);
+				return;
+			}
+		}
+
+		
 	}
 }

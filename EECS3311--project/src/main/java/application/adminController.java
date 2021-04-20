@@ -109,11 +109,22 @@ public class adminController  implements Initializable{
 
 	@FXML
 	public void UpdatePayment(ActionEvent event) {
-		//admin.ChangePaymentStatus();	
+		//admin.ChangePaymentStatus(Stri);	
 	}
 
 	@FXML
 	public void AddOfficer(ActionEvent event) throws IOException {
+		List<Officer> list = admin.getList();
+		for(Officer o: list) {
+			System.out.print("CHECKING OFFICER -> "+o.getID());
+			if(o.getID().equals(ID.getText())) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setHeaderText("Could not add officer"); 
+				alert.setContentText("Officer already exists in the system"); 
+				alert.showAndWait();
+				return;
+			}
+		}
 		if(admin.AddOfficer(ID.getText(),password.getText())) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setHeaderText(null); 

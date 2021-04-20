@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,5 +39,16 @@ public class CustomerTest {
 		assertEquals(customer.Pay("N5A0C1"), true);
 	}
 	
+	@Test
+	public void removeRecord() throws Exception {
+		List<ParkingSpot> s = customer.ViewBookings();
+		assertEquals(customer.CancelBookings(s.get(0).ID),true);
+	}
+	
+	@Test
+	public void getRate() {
+		List<ParkingSpot> s = customer.ViewBookings();
+		customer.getRate(s.get(0).ID);
+	}
 	
 }

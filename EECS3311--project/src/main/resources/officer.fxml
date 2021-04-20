@@ -72,7 +72,6 @@
                   <TableColumn fx:id="requestcol" prefWidth="75.0" text="Parking Spot" />
                   <TableColumn fx:id="paymentCol" prefWidth="75.0" text="Availability" />
                   <TableColumn fx:id="availCol" prefWidth="75.0" text="Payment Status" />
-                  <TableColumn fx:id="requests" prefWidth="75.0" text="Request" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
