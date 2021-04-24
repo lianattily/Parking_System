@@ -45,7 +45,7 @@
                   <Label prefHeight="17.0" prefWidth="419.0" text="Please pick a payment method" />
                   <HBox prefHeight="59.0" prefWidth="346.0">
                      <children>
-                        <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="105.0" text="Paypal" textAlignment="CENTER">
+                        <JFXRadioButton fx:id="paypal" contentDisplay="CENTER" prefHeight="17.0" prefWidth="105.0" text="Paypal" textAlignment="CENTER">
                            <HBox.margin>
                               <Insets left="5.0" top="25.0" />
                            </HBox.margin>
@@ -53,12 +53,12 @@
                               <ToggleGroup fx:id="tg" />
                            </toggleGroup>
                         </JFXRadioButton>
-                        <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="104.0" text="Debit" textAlignment="CENTER" toggleGroup="$tg">
+                        <JFXRadioButton fx:id="debit" contentDisplay="CENTER" prefHeight="17.0" prefWidth="104.0" text="Debit" textAlignment="CENTER" toggleGroup="$tg">
                            <HBox.margin>
                               <Insets left="5.0" top="25.0" />
                            </HBox.margin>
                         </JFXRadioButton>
-                        <JFXRadioButton contentDisplay="CENTER" prefHeight="17.0" prefWidth="109.0" text="Credit card" textAlignment="CENTER" toggleGroup="$tg">
+                        <JFXRadioButton fx:id="creditcard" contentDisplay="CENTER" prefHeight="17.0" prefWidth="109.0" text="Credit card" textAlignment="CENTER" toggleGroup="$tg">
                            <HBox.margin>
                               <Insets left="5.0" top="25.0" />
                            </HBox.margin>
@@ -77,7 +77,7 @@
                   </JFXTextField>
                   <HBox prefHeight="55.0" prefWidth="326.0">
                      <children>
-                        <DatePicker prefHeight="25.0" prefWidth="205.0" promptText="Expiration Date">
+                        <DatePicker fx:id="expDate" prefHeight="25.0" prefWidth="205.0" promptText="Expiration Date">
                            <HBox.margin>
                               <Insets bottom="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
@@ -107,10 +107,15 @@
                                  </VBox.margin>
                               </JFXButton>
                               <Separator prefWidth="200.0" />
-                              <JFXButton buttonType="RAISED" onAction="#savePaymentMethod" prefHeight="25.0" prefWidth="421.0" text="or save payment method to pay later" textFill="#7a6d48">
+                              <JFXButton buttonType="RAISED" onAction="#savePaymentMethod" prefHeight="25.0" prefWidth="421.0" text="save payment method to pay later" textFill="#7a6d48">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" />
+                                    <Insets left="10.0" right="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXButton buttonType="RAISED" onAction="#loadSavedPayment" prefHeight="25.0" prefWidth="421.0" text="or use saved payment method" textFill="#315659">
                                  <font>
                                     <Font size="9.0" />
                                  </font>

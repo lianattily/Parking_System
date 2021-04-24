@@ -1,5 +1,7 @@
 package application;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -49,6 +51,7 @@ public class customerController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		rateCol.setCellValueFactory(new PropertyValueFactory<>("Rate"));
+		
 		try {
 			fill();
 		} catch (IOException e) {
@@ -109,15 +112,17 @@ public class customerController implements Initializable{
 	
 	@FXML
 	public void pay(ActionEvent event) throws IOException {
-		Parent Scene2root = FXMLLoader.load(getClass().getResource("/pay.fxml"));
-		Scene AddInfoScene = new Scene(Scene2root);
-
-		//this gets scene information
-		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-		window.setScene(AddInfoScene);
-		window.getIcons().add(new Image("https://cdn.dribbble.com/users/2449441/screenshots/6113182/parkit_app_icon.png"));
-
-		window.show();
+		Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/pay.fxml"));
+            Stage stage = new Stage();
+            //stage.setTitle("Advanced Options");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	@FXML
@@ -182,12 +187,26 @@ public class customerController implements Initializable{
         try {
             root = FXMLLoader.load(getClass().getResource("/bookingView.fxml"));
             Stage stage = new Stage();
-            stage.setTitle("Advanced Options");
+           // stage.setTitle("Advanced Options");
             stage.setScene(new Scene(root, 450, 450));
             stage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	@FXML
+	public void UserManual(ActionEvent event) {
+		File usermanual = new File("Documentation/User Manual.pdf");
+		if (Desktop.isDesktopSupported()) {
+			new Thread(() -> {
+				try {
+					Desktop.getDesktop().open(usermanual);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}).start();
+		}
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import com.jfoenix.controls.JFXTextField;
 
@@ -73,10 +74,12 @@ public class bookingController implements Initializable{
 		System.out.println("Booking date = "+date.getValue());
 		System.out.println(Integer.parseInt(Fhour.getText())+" " +Integer.parseInt(Fmin.getText())+"   " +Integer.parseInt(Thour.getText())+"   " +Integer.parseInt(Tmin.getText()));
 		ParkingSpot p = new ParkingSpot(options.getSelectionModel().getSelectedItem(), LICENSE.getText(),"UNPAID",Integer.parseInt(Fhour.getText()), Integer.parseInt(Fmin.getText()),Integer.parseInt(Thour.getText()), Integer.parseInt(Tmin.getText()),date.getValue(), getRate());
-		if(CUSTOMER.bookSpot(options.getSelectionModel().getSelectedItem(),p)) {
+		String uniqueID = UUID.randomUUID().toString().substring(0, 5);
+		
+		if(CUSTOMER.bookSpot(uniqueID,options.getSelectionModel().getSelectedItem(),p)) {
 			//TODO: change to "REQUESTED" 
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
-			alert.setHeaderText(null); 
+			alert.setHeaderText("BOOKING ID "+uniqueID); 
 			alert.setContentText(options.getSelectionModel().getSelectedItem()+" Booked successfully until: "+Thour.getText()+":"+Tmin.getText()); 
 			alert.showAndWait();
 			Stage stage = (Stage) close.getScene().getWindow();

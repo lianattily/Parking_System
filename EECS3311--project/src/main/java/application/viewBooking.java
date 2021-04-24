@@ -30,7 +30,7 @@ public class viewBooking implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		bookingCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
-		paymentCol.setCellValueFactory(new PropertyValueFactory<>("isPaid"));
+		paymentCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
 		expCol.setCellValueFactory(new PropertyValueFactory<>("Exp"));
 		try {
 			fill();
@@ -46,6 +46,7 @@ public class viewBooking implements Initializable{
 		List<ParkingSpot> cs = CUSTOMER.ViewBookings();
 		System.out.println("bookings list size = "+cs.size());
 		for(ParkingSpot ps: cs) {
+			System.out.println("ps.getIsPaid() = "+ps.getisPaid());
 			if(!bookingView.getItems().contains(ps))
 				bookingView.getItems().add(ps);
 		}

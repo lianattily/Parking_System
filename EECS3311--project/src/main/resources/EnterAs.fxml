@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.Icon?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -47,9 +46,6 @@
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
-                     <graphic>
-                        <Icon content="HELP_OUTLINE" />
-                     </graphic>
                   </JFXButton>
                   <JFXButton alignment="CENTER" onAction="#userLogin" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2978a0; -fx-background-radius: 50%; -fx-border-width: 5px; -fx-border-color: #BCAB79; -fx-border-radius: 50%;" text="Regular User" textFill="WHITE" textOverrun="CLIP">
                      <font>

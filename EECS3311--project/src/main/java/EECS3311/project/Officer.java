@@ -33,7 +33,7 @@ public class Officer implements User {
 	}
 	
 	private void fill() {
-		System.out.println("officer.java 36 HERE");
+		//System.out.println("officer.java 36 HERE");
 		String path = "ParkingDatabase.txt"; 
 		String line = ""; 
 		try {
@@ -60,12 +60,11 @@ public class Officer implements User {
 		
 	}
 	
-	public void SaveRecord(String ID, boolean b, String paymentStatus,String Rate) throws IOException {
+	public void SaveRecord(String ID,  String paymentStatus,String Rate) throws IOException {
 		System.out.println("In save records");
-		String avail="Booked";
-		if(b) {
-			avail ="Available";
-		}
+		
+		String	avail ="Available";
+		
 		System.out.println(avail);
 		FileWriter fw = new FileWriter("Parkingdatabase.txt", true); 
 		BufferedWriter bw = new BufferedWriter(fw); 
@@ -106,9 +105,10 @@ public class Officer implements User {
 		ParkingSpot s = new ParkingSpot(ID,rate);
 		System.out.println(Spots.add(s)+"  current spots:");
 		for(ParkingSpot sp: Spots) {
+			if(sp.getID().equals(ID)) return null;
 			System.out.println(sp.getID()+" , "+sp.getRate());
 		}
-		SaveRecord(ID, s.getisFilled(), s.getisPaid(), rate.toString());
+		SaveRecord(ID, s.getisPaid(), rate.toString());
 		
 		return s;
 	}
@@ -163,26 +163,116 @@ public class Officer implements User {
 		return temp.renameTo(dump);
 	}
 	
-	public void CancelRequest(String ID) {
-		for(ParkingSpot s: Spots) {
-			if(s.ID.equals(ID)) {
-				s.freeSpot();
-				break;
+	
+	private boolean removeBookingRecord(String toRemove,String unique) throws Exception {
+		File file = new File("BookingsDatabase.txt");
+		File temp = new File("TempFile.txt");
+		String ID = "", PaymentStatus = "", Expiration = "" , license = "", start = "", date="", rate="",uniqueID="",avail="";   
+		FileWriter fw = new FileWriter("TempFile.txt",false); 
+		BufferedWriter bw = new BufferedWriter(fw); 
+		PrintWriter pw = new PrintWriter(bw); 
+		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
+		x.useDelimiter("[,\n]"); 
+		while(x.hasNext()) { 
+			uniqueID=x.next();
+			ID = x.next(); 
+			license = x.next();
+			PaymentStatus = x.next(); 
+			avail=x.next();
+			//N3W0A5,TORONTO123,UNPAID,12,30,22,45,22/04/2021,12
+			start = x.next()+","+x.next();
+			Expiration = x.next()+","+x.next();
+			date=x.next();
+			rate=x.next();
+			System.out.println("ID in line 176 = "+ID+" vs "+ toRemove);
+			if(!ID.equals(toRemove) && !uniqueID.equals(unique)){ 
+				System.out.println("RE WRITING : "+ID+" , "+PaymentStatus+" , "+Expiration);
+				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+","+avail +","+start+","+ Expiration+","+date+","+rate); 
+
 			}
 		}
+		x.close();
+		pw.flush();
+		pw.close();
+		fw.close();
+		bw.close();
+		if(file.exists()) {
+			System.out.println("FILE EXISTS"+file.delete());
+		}else System.out.println("file dont exist");
+
+		File dump = new File("BookingsDatabase.txt");
+
+
+		return temp.renameTo(dump);
 	}
 	
-	public void GrantRequest(String ID) {
+	public boolean CancelRequest(String ID, String unique) throws Exception {
+		for(ParkingSpot s: Spots) {
+			if(s.ID.equals(ID) && s.getUnique().equals(unique)) {
+				s.freeSpot();
+				return removeBookingRecord(ID, unique);
+			}
+		}
+		return false;
+	}
+	
+	private boolean updateBookingStatus(String toChange) throws IOException {
+		File file = new File("BookingsDatabase.txt");
+		File temp = new File("TempFile.txt");
+		String ID = "", PaymentStatus = "", Expiration = "", license = "", start = "", date="", rate="", uniqueID="",avail="";  
+		FileWriter fw = new FileWriter("TempFile.txt",false); 
+		BufferedWriter bw = new BufferedWriter(fw); 
+		PrintWriter pw = new PrintWriter(bw); 
+		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
+		x.useDelimiter("[,\n]"); 
+		while(x.hasNext()) { 
+			uniqueID=x.next();
+			ID = x.next(); 
+			license = x.next();
+			PaymentStatus = x.next(); 
+			avail = x.next();
+			//84a56,N3W0A5,TORONTO123,PENDING,PENDING,12,30,10,30,22/04/2021,12
+			start = x.next()+","+x.next();
+			Expiration = x.next()+","+x.next();
+			date=x.next();
+			rate=x.next();
+			System.out.println("ID in line 176 = "+ID+" vs "+ toChange);
+			if(ID.equals(toChange)){ 
+				System.out.println("RE WRITING : "+ID+" , "+"BOOKED"+" , "+Expiration);
+				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus +","+"FILLED"+","+start+","+ Expiration+","+date+","+rate); 
+			}
+			else {
+				System.out.println("KEEPING : "+ID+" , "+PaymentStatus+" , "+Expiration);
+				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus +","+avail+","+start+","+ Expiration+","+date+","+rate); 
+			}
+		}
+		x.close();
+		pw.flush();
+		pw.close();
+		fw.close();
+		bw.close();
+		if(file.exists()) {
+			System.out.println("FILE EXISTS"+file.delete());
+		}else System.out.println("file dont exist");
+
+		File dump = new File("BookingsDatabase.txt");
+
+
+		return temp.renameTo(dump);
+	}
+	
+	public boolean GrantRequest(String ID) throws IOException {
 		for(ParkingSpot s: Spots) {
 			if(s.ID.equals(ID)) {
 				s.setAvail();
-				break;
+				return updateBookingStatus(ID);
 			}
 		}
+		return false;
 	}
 	
-	public void visit(customer customer) {
-		customer.accept();
+	public List<ParkingSpot> visit(customer customer) {
+		return customer.accept(this);
 	}
 
 	public List<ParkingSpot> getSpots() {
@@ -191,5 +281,9 @@ public class Officer implements User {
 	
 	public String getID() {
 		return ID;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 }

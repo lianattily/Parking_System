@@ -14,17 +14,16 @@ public class ParkingSpot {
 	ParkingSpotStatus status;
 	String LicensePlate;
 	public String ID;
-	public String avail, stat;
 	LocalDate date;
+	String uniqueID;
 	/**
 	 * Constructor for adding by ID (default settings, no expiration date)
 	 */
 	public ParkingSpot(String ID, int rate) {
 		isFilled=false;
 		isPaid=isPaid.UNPAID;
-		avail = isPaid.toString();
+		//avail = isPaid.toString();
 		status=status.AVAILABLE;
-		stat=status.toString();
 		this.rate.setRate(rate);
 		this.ID=ID;
 	}
@@ -32,6 +31,7 @@ public class ParkingSpot {
 	 * Constructor for customer with start and end times, license plate
 	 */
 	public ParkingSpot(String spacenum,String license,String status, int startH, int startM, int endH, int endM, LocalDate localDate, int rate) {
+		
 		ID = spacenum;
 		this.status=this.status.PENDING;
 		isFilled=true;
@@ -43,7 +43,29 @@ public class ParkingSpot {
 		EndHour  = endH ;
 		EndMinute = endM;
 		ExpirationTime = endH;
-		stat=status.toString();
+		//avail = isPaid.toString();
+		LicensePlate=license;
+		System.out.println("END HR = "+ExpirationTime);
+		this.date=localDate;
+		this.rate.setRate(rate);
+	}
+	
+	public ParkingSpot(String uniqueID, String spacenum,String license,String payStat,String avail, int startH, int startM, int endH, int endM, LocalDate localDate, int rate) {
+		this.uniqueID=uniqueID;
+		ID = spacenum;
+		if(avail.equals("AVAILABLE"))
+			this.status=this.status.AVAILABLE;
+		else if(avail.equals("PENDING")) this.status=this.status.PENDING;
+		else this.status=this.status.FILLED;
+		isFilled=true;
+		if(payStat.equals("UNPAID")) {
+			isPaid = isPaid.UNPAID;
+		}else isPaid = isPaid.PENDING;
+		StartHour=startH;
+		StartMin = startM;
+		EndHour  = endH ;
+		EndMinute = endM;
+		ExpirationTime = endH;
 		avail = isPaid.toString();
 		LicensePlate=license;
 		System.out.println("END HR = "+ExpirationTime);
@@ -72,7 +94,6 @@ public class ParkingSpot {
 	public boolean freeSpot() {
 		isFilled=false;
 		status= status.AVAILABLE;
-		stat = status.toString();
 		return false;
 		
 	}
@@ -86,7 +107,6 @@ public class ParkingSpot {
 	public boolean setAvail() {
 		isFilled=true;
 		status= status.FILLED;
-		stat = status.toString();
 		return isFilled;
 	}
 	public String getisPaid() {
@@ -96,10 +116,10 @@ public class ParkingSpot {
 		return ID;
 	}
 	public String getStat() {
-		return stat;
+		return status.toString();
 	}
-	public String getAvail() {
-		return avail;
+	public String getAvail(){
+		return isPaid.toString();
 	}
 	public String getExp() {
 		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -112,6 +132,15 @@ public class ParkingSpot {
 	public String getRate() {
 		String s = "$"+ String.valueOf(rate.getRate());
 		return s;
+	}
+	
+	public String getUnique() {
+		System.out.println("uniqueID = "+uniqueID);
+		return uniqueID;
+	}
+	
+	public String getLicense() {
+		return LicensePlate;
 	}
 	
 }

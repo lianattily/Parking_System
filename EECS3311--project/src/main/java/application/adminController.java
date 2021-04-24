@@ -1,5 +1,7 @@
 package application;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -21,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 
 import com.jfoenix.controls.JFXTextField;
 import com.lynden.gmapsfx.GoogleMapView;
@@ -50,34 +53,34 @@ public class adminController  implements Initializable{
 	Officer officer = new Officer();
 	SystemAdmin admin = new SystemAdmin();
 	customer customer = new customer();
-	@FXML
-	private ComboBox<String> status;
+
 	@FXML private JFXTextField ID, password;
 	@FXML
 	private TableView<ParkingSpot> tableView;
 	@FXML
 	private TableColumn<ParkingSpot, String> requestcol;
 	@FXML
-	private TableColumn<ParkingSpot, String> paymentCol;
+	private TableColumn<ParkingSpot, String> bookingID;
 	@FXML
 	private TableColumn<ParkingSpot, String> availCol;
+	@FXML
+	private TableColumn<ParkingSpot, String> license;
 
 	@FXML 
 	private TableView<Officer> officersView;
 	@FXML
-	private TableColumn<Officer, String> officerID;
+	private TableColumn<Officer, String> officerID,officerPass;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// mapView.addMapInializedListener(this);
 
 		officerID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+		officerPass.setCellValueFactory(new PropertyValueFactory<>("password"));
 		//officersView.setItems(officerList);
 		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
-		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
+		license.setCellValueFactory(new PropertyValueFactory<>("license"));
 		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
-		status.getItems().add("Paid");
-		status.getItems().add("Unpaid");
 		try {
 			fill();
 		} catch (IOException e) {
@@ -105,8 +108,6 @@ public class adminController  implements Initializable{
 		}
 
 	}
-
-
 	@FXML
 	public void UpdatePayment(ActionEvent event) {
 		//admin.ChangePaymentStatus(Stri);	
@@ -124,6 +125,13 @@ public class adminController  implements Initializable{
 				alert.showAndWait();
 				return;
 			}
+		}
+		if(ID.getText()==null || password.getText()==null) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText("Could not add officer"); 
+			alert.setContentText("All fields are required."); 
+			alert.showAndWait();
+			return;
 		}
 		if(admin.AddOfficer(ID.getText(),password.getText())) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -180,19 +188,28 @@ public class adminController  implements Initializable{
 			alert.setContentText("Please select a booking from the list"); 
 			alert.showAndWait();
 		}else {
-			String s = status.getSelectionModel().getSelectedItem();
-			switch(s) {
-			case "Paid":  if(admin.ChangePaymentStatus(tableView.getSelectionModel().getSelectedItem())) {
+
+			if(admin.ChangePaymentStatus(tableView.getSelectionModel().getSelectedItem())) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setHeaderText(null); 
 				alert.setContentText("Update status to PAID"); 
 				alert.showAndWait();
 				fill();
 			}
-			break;
-			default: 
-			}
 		}
 	}
 
+	@FXML
+	public void UserManual(ActionEvent event) {
+		File usermanual = new File("Documentation/User Manual.pdf");
+		if (Desktop.isDesktopSupported()) {
+			new Thread(() -> {
+				try {
+					Desktop.getDesktop().open(usermanual);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}).start();
+		}
+	}
 }

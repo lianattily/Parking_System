@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -49,21 +50,24 @@ public class parkingManager implements Initializable{
 	customer CUSTOMER = new customer();
 	SystemAdmin admin = new SystemAdmin();
 	@FXML
-	private TableView<ParkingSpot> tableView;
+	private TableView<ParkingSpot> tableView, bookingsView;
 	@FXML
-	private TableColumn<ParkingSpot, String> requestcol;
+	private TableColumn<ParkingSpot, String> spaceCol,requestcol;
 	@FXML
 	private TableColumn<ParkingSpot, String> paymentCol;
 	@FXML
-	private TableColumn<ParkingSpot, String> availCol;
+	private TableColumn<ParkingSpot, String> availCol,avail;
 	@FXML
 	private TableColumn<ParkingSpot, String> requests;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+		spaceCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
 		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
+		
+		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+		avail.setCellValueFactory(new PropertyValueFactory<>("stat"));
 		//tableView.setItems(observableList);
 		try {
 			fill();
@@ -77,14 +81,17 @@ public class parkingManager implements Initializable{
 		tableView.getItems().clear();
 		List<ParkingSpot> s = officer.getSpots();
 		System.out.println("SIZE of officer spots list in parkingManager = "+s.size());
+		
+		for(ParkingSpot ps: s) {
+			System.out.println("ADDING "+ps.getID()+tableView.getItems().add(ps)+"    "+ps.getStat());
+			
+		}
 		s = CUSTOMER.ViewBookings();
 		for(ParkingSpot ps: s) {
-			tableView.getItems().add(ps);
-		}
-		for(ParkingSpot ps: s) {
-			System.out.println("SEARCHING FOR -> "+ps.getID());
-			if(!tableView.getItems().contains(ps)) {
-				tableView.getItems().add(ps);
+			System.out.println("SEARCHING FOR -> "+ps.getID()+"  stat = "+ps.getStat()+"   unique = "+ps.getUnique());
+			if(!bookingsView.getItems().contains(ps)) {
+				System.out.println("adding booked spot "+ps.ID);
+				bookingsView.getItems().add(ps);
 			}
 		}
 
@@ -222,40 +229,34 @@ public class parkingManager implements Initializable{
 	}
 
 	@FXML
-	public void GRANT(ActionEvent event) {
-		//change PENDING -> BOOKED
-		try {
-			// input the (modified) file content to the StringBuffer "input"
-			BufferedReader file = new BufferedReader(new FileReader("notes.txt"));
-			StringBuffer inputBuffer = new StringBuffer();
-			String line;
-
-			while ((line = file.readLine()) != null) {
-				//line = ... // replace the line here
-				inputBuffer.append(line);
-				inputBuffer.append('\n');
-			}
-			file.close();
-
-			// write the new string with the replaced line OVER the same file
-			FileOutputStream fileOut = new FileOutputStream("notes.txt");
-			fileOut.write(inputBuffer.toString().getBytes());
-			fileOut.close();
-
-		} catch (Exception e) {
-			System.out.println("Problem reading file.");
+	public void GRANT(ActionEvent event) throws IOException {
+		if(bookingsView.getSelectionModel().getSelectedItem()==null) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("Please select a booked spot to grant"); 
+			alert.showAndWait();
+			return;
+		}
+		
+		if(officer.GrantRequest(bookingsView.getSelectionModel().getSelectedItem().getID())) {
+			bookingsView.getSelectionModel().getSelectedItem().setAvail();
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText(null); 
+			alert.setContentText("Booking has been granted."); 
+			alert.showAndWait();
+			fill();
 		}
 	}
 	@FXML
 	public void CANCEL(ActionEvent event) throws Exception {
 
-		if(tableView.getSelectionModel().getSelectedItem()==null) {
+		if(bookingsView.getSelectionModel().getSelectedItem()==null) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null); 
-			alert.setContentText("Please select a spot to remove"); 
+			alert.setContentText("Please select a booked spot to cancel"); 
 			alert.showAndWait();
 		}else 
-			if(CUSTOMER.CancelBookings(tableView.getSelectionModel().getSelectedItem().ID)) {
+			if(officer.CancelRequest(bookingsView.getSelectionModel().getSelectedItem().ID, bookingsView.getSelectionModel().getSelectedItem().getUnique())) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setHeaderText(null); 
 				alert.setContentText("Booking has been cancelled."); 
@@ -271,4 +272,32 @@ public class parkingManager implements Initializable{
 
 	}
 
+	@FXML
+	public void viewBooking(ActionEvent event) {
+		Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/bookingView.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Advanced Options");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	@FXML
+	public void UserManual(ActionEvent event) {
+		File usermanual = new File("Documentation/User Manual.pdf");
+		if (Desktop.isDesktopSupported()) {
+			new Thread(() -> {
+				try {
+					Desktop.getDesktop().open(usermanual);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}).start();
+		}
+	}
 }

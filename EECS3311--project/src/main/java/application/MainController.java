@@ -244,6 +244,7 @@ public class MainController implements Initializable {
 	
 	@FXML
 	private void officerUI(ActionEvent event) throws IOException {
+		if(officer.LogIn(offID.getText(), offPassword.getText())) {
 		Parent Scene2root = FXMLLoader.load(getClass().getResource("/officer.fxml"));
 		Scene AddInfoScene = new Scene(Scene2root);
 
@@ -251,6 +252,13 @@ public class MainController implements Initializable {
 		Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		window.setScene(AddInfoScene);
 		window.show();
+		}
+		else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("Could not login as a Parking Authority Officer"); 
+			alert.showAndWait();
+		}
 	}
 	
 	/** %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

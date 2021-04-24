@@ -15,7 +15,10 @@ public class Main extends Application {
 		try {
 			System.out.println(getClass().getResource("/EnterAs.fxml"));
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/EnterAs.fxml"));
-			AnchorPane root = loader.load();
+			System.out.println("18");
+			AnchorPane root = (AnchorPane) loader.load();
+			System.out.println("20");
+			
 			MainController controller = loader.getController();
 			controller.init(primaryStage);
 

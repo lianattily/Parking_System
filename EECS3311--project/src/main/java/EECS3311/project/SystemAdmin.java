@@ -98,36 +98,42 @@ public class SystemAdmin implements User {
 	public boolean ChangePaymentStatus(ParkingSpot s) throws IOException {
 		s.isPaid= s.isPaid.PAID;
 		
-		return updateDatabase(s.ID);
+		return updateDatabase(s.ID, s.getUnique());
 
 	}
 
 	/* 
 	 * Update BookingsDatabase when payment status changes
 	 */
-	private boolean updateDatabase(String id) throws IOException {
+	private boolean updateDatabase(String id, String unique) throws IOException {
 		File file = new File("BookingsDatabase.txt");
 		File temp = new File("TempFile.txt");
-		String ID = "", PaymentStatus = "", Expiration = "";  
+		String ID = "", PaymentStatus = "", Expiration = "", license = "", start = "", date="", rate="",uniqueID="",avail="";  
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
 		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
 		x.useDelimiter("[,\n]"); 
-		while(x.hasNext()) { 
+		while(x.hasNext()) {
+			uniqueID=x.next();
 			ID = x.next(); 
+			license = x.next();
 			PaymentStatus = x.next(); 
-			Expiration = x.next();
+			avail=x.next();
+			//84a56,N3W0A5,TORONTO123,PENDING,PENDING,12,30,10,30,22/04/2021,12
+			start = x.next()+","+x.next();
+			Expiration = x.next()+","+x.next();
+			date=x.next();
+			rate=x.next();
 			System.out.println("ID in line 176 = "+ID+" vs "+ id);
-			if(ID.equals(id)){ 
+			if(ID.equals(id) && unique.equals(uniqueID)){ 
 				System.out.println("RE WRITING : "+ID+" , "+"PAID"+" , "+Expiration);
-				pw.println(ID+ "," + "PAID" +"," + Expiration); 
+				pw.println(uniqueID+","+ID+ "," + license +"," +"PAID" +","+avail+","+start+","+ Expiration+","+date+","+rate); 
 			}
 			else {
 				System.out.println("KEEPING : "+ID+" , "+PaymentStatus+" , "+Expiration);
-				pw.println(ID+ "," + PaymentStatus +"," + Expiration); 
+				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+avail+"," +","+start+","+ Expiration+","+date+","+rate); 
 			}
-			x.next();
 		}
 		x.close();
 		pw.flush();
@@ -173,6 +179,7 @@ public class SystemAdmin implements User {
 
 			System.out.println("ID in line 176 = "+ID+" vs "+ toRemove);
 			if(!ID.equals(toRemove)){ 
+				System.out.println("KEEPING OFFICER "+ID);
 				pw.println(ID+ "," + Password); 
 			}
 		}

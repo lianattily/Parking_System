@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -14,11 +15,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.parkingManager">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.parkingManager">
    <children>
-      <Pane prefHeight="400.0" prefWidth="181.0" style="-fx-background-color: #315659;">
+      <Pane prefHeight="500.0" prefWidth="181.0" style="-fx-background-color: #315659;">
          <children>
-            <VBox prefHeight="400.0" prefWidth="181.0">
+            <VBox prefHeight="500.0" prefWidth="181.0">
                <children>
                   <ImageView fitHeight="69.0" fitWidth="73.0" preserveRatio="true">
                      <image>
@@ -33,15 +34,18 @@
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="50.0" top="10.0" />
+                        <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXButton alignment="CENTER" onAction="#AddSpotOfficer" prefHeight="49.0" prefWidth="191.0" text="Add Parking Spot" textAlignment="CENTER" textFill="#bcab79">
+                  <JFXButton alignment="CENTER" onAction="#UserManual" prefHeight="11.0" prefWidth="181.0" text="User Manual" textAlignment="CENTER" textFill="#c6e0ff">
                      <font>
-                        <Font name="Quicksand Regular" size="12.0" />
+                        <Font name="Quicksand Regular" size="9.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
                   </JFXButton>
-                  <JFXButton alignment="CENTER" prefHeight="49.0" prefWidth="181.0" text="View Bookings" textAlignment="CENTER" textFill="#bcab79">
+                  <JFXButton alignment="CENTER" onAction="#AddSpotOfficer" prefHeight="49.0" prefWidth="191.0" text="Add Parking Spot" textAlignment="CENTER" textFill="#bcab79">
                      <font>
                         <Font name="Quicksand Regular" size="12.0" />
                      </font>
@@ -65,11 +69,11 @@
             </VBox>
          </children>
       </Pane>
-      <VBox layoutX="180.0" prefHeight="400.0" prefWidth="520.0">
+      <VBox layoutX="180.0" prefHeight="500.0" prefWidth="620.0">
          <children>
-            <TableView fx:id="tableView" prefHeight="500.0" prefWidth="700.0" stylesheets="@application.css">
+            <TableView fx:id="tableView" prefHeight="226.0" prefWidth="509.0" stylesheets="@application.css">
                <columns>
-                  <TableColumn fx:id="requestcol" prefWidth="75.0" text="Parking Spot" />
+                  <TableColumn fx:id="spaceCol" prefWidth="75.0" text="Parking Spot" />
                   <TableColumn fx:id="paymentCol" prefWidth="75.0" text="Availability" />
                   <TableColumn fx:id="availCol" prefWidth="75.0" text="Payment Status" />
                </columns>
@@ -77,10 +81,10 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </TableView>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="66.0" prefWidth="612.0">
                <children>
                   <JFXTextField fx:id="address" focusColor="#bcab79" prefHeight="25.0" prefWidth="191.0" promptText="Parking space number (Postal Code)" unFocusColor="#bcab79">
                      <font>
@@ -113,6 +117,27 @@
                   <Insets bottom="8.0" left="8.0" top="8.0" />
                </VBox.margin>
             </HBox>
+            <Separator prefWidth="200.0" />
+            <Label alignment="CENTER" prefHeight="15.0" prefWidth="631.0" text="Customer Bookings" textFill="#2978a0">
+               <font>
+                  <Font name="Quicksand Medium" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TableView fx:id="bookingsView" layoutX="15.0" layoutY="10.0" prefHeight="226.0" prefWidth="509.0" stylesheets="@application.css">
+               <columns>
+                  <TableColumn fx:id="requestcol" prefWidth="75.0" text="Parking Spot" />
+                  <TableColumn fx:id="avail" prefWidth="75.0" text="Availability" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </TableView>
          </children>
       </VBox>
    </children>
