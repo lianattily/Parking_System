@@ -22,7 +22,7 @@ public class SystemAdmin implements User {
 	public SystemAdmin() {
 		LogInStatus=false;
 		email = "MASTER";
-		password = "MASTERLOGIN!";
+		password = "MASTER";
 		OFFICERS = new LinkedList<Officer>();
 		init();
 	}
@@ -77,27 +77,30 @@ public class SystemAdmin implements User {
 			System.out.println("checking officer "+o.getID());
 			if(o.getID().equals(ID)) return false;
 		}
-		
-			OFFICERS.add(newOfficer);
-			SaveRecord(ID, password);
-			return true;
+
+		OFFICERS.add(newOfficer);
+		SaveRecord(ID, password);
+		return true;
 	}
 
 
 	public boolean RemoveOfficer(String ID) throws Exception {
 
-		for(int i=0;i<OFFICERS.size();i++) {
-			if(OFFICERS.get(i).getID().equals(ID)) {
-				OFFICERS.remove(i);
+		for(Officer o: OFFICERS) {
+
+			System.out.println("Officer = "+o.getID()+" vs "+ID);
+			if(o.getID().equals(ID)) {
+				System.out.println("FOUND OFFICER TO REMOVE");
 				return removeRecord(ID);
 			}
 		}
 		return false;
+
 	}
 
 	public boolean ChangePaymentStatus(ParkingSpot s) throws IOException {
 		s.isPaid= s.isPaid.PAID;
-		
+		System.out.println("unique id = "+s.getUnique());
 		return updateDatabase(s.ID, s.getUnique());
 
 	}
@@ -112,30 +115,38 @@ public class SystemAdmin implements User {
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
-		x.useDelimiter("[,\n]"); 
-		while(x.hasNext()) {
-			uniqueID=x.next();
-			ID = x.next(); 
-			license = x.next();
-			PaymentStatus = x.next(); 
-			avail=x.next();
-			//84a56,N3W0A5,TORONTO123,PENDING,PENDING,12,30,10,30,22/04/2021,12
-			start = x.next()+","+x.next();
-			Expiration = x.next()+","+x.next();
-			date=x.next();
-			rate=x.next();
-			System.out.println("ID in line 176 = "+ID+" vs "+ id);
-			if(ID.equals(id) && unique.equals(uniqueID)){ 
-				System.out.println("RE WRITING : "+ID+" , "+"PAID"+" , "+Expiration);
-				pw.println(uniqueID+","+ID+ "," + license +"," +"PAID" +","+avail+","+start+","+ Expiration+","+date+","+rate); 
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader("BookingsDatabase.txt"));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				//090a0,L9A5G2,TORONTO124,UNPAID,PENDING,12,30,2,30,24/04/2021,8
+				// String uniqueID, String spacenum,String license,String payStat,String avail, int startH, int startM, int endH, int endM, LocalDate localDate, int rate
+				uniqueID=values[0];
+				ID =values[1]; 
+				license = values[2];
+				PaymentStatus =values[3];
+				avail=values[4];
+				//N3W0A5,TORONTO123,UNPAID,12,30,22,45,22/04/2021,12
+				start = values[5]+","+values[6];
+				Expiration = values[7]+","+values[8];
+				date=values[9];
+				rate=values[10];
+				System.out.println("ID in line 176 = "+unique+" vs "+ uniqueID);
+				if(values[0].equals(unique)){ 
+					System.out.println("RE WRITING : "+uniqueID+","+ID+ "," + license +"," +"PAID" +","+avail+","+start+","+ Expiration+","+date+", rate = "+rate);
+					pw.println(uniqueID+","+ID+ "," + license +"," +"PAID" +","+avail+","+start+","+ Expiration+","+date+","+rate); 
+				}
+				else {
+					System.out.println("KEEPING : "+uniqueID+","+ID+ "," + license +"," +PaymentStatus +","+avail+","+start+","+ Expiration+","+date+",  rate = "+rate);
+					pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+","+avail+"," +start+","+ Expiration+","+date+","+rate); 
+				}
 			}
-			else {
-				System.out.println("KEEPING : "+ID+" , "+PaymentStatus+" , "+Expiration);
-				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+avail+"," +","+start+","+ Expiration+","+date+","+rate); 
-			}
+			br.close();
 		}
-		x.close();
+		catch (Exception e) {
+
+		}
 		pw.flush();
 		pw.close();
 		fw.close();
@@ -170,20 +181,25 @@ public class SystemAdmin implements User {
 		String ID = "", Password = "";  
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
-		PrintWriter pw = new PrintWriter(bw); 
-		Scanner x = new Scanner(new File(name)); 
-		x.useDelimiter("[,\n]"); 
-		while(x.hasNext()) { 
-			ID = x.next(); 
-			Password = x.next(); 
+		PrintWriter pw = new PrintWriter(bw); 	
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader(name));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				ID =values[0]; 
+				Password=values[1];
 
-			System.out.println("ID in line 176 = "+ID+" vs "+ toRemove);
-			if(!ID.equals(toRemove)){ 
-				System.out.println("KEEPING OFFICER "+ID);
-				pw.println(ID+ "," + Password); 
-			}
+				System.out.println("ID in line 176 = "+ID+" vs "+ toRemove);
+				if(!ID.equals(toRemove)){ 
+					System.out.println("KEEPING OFFICER "+ID);
+					pw.println(ID+ "," + Password); 
+				}
+			}br.close();
 		}
-		x.close();
+		catch (Exception e) {
+
+		}
 		pw.flush();
 		pw.close();
 		fw.close();

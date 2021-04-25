@@ -15,7 +15,7 @@ public class ParkingSpot {
 	String LicensePlate;
 	public String ID;
 	LocalDate date;
-	String uniqueID;
+	String uniqueID = "";
 	/**
 	 * Constructor for adding by ID (default settings, no expiration date)
 	 */

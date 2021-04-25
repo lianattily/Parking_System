@@ -13,33 +13,37 @@ import org.junit.jupiter.api.Test;
 public class AdminTest {
 
 	SystemAdmin admin = new SystemAdmin();
+	
 	@Test
 	public void Login() {
-		assertEquals(admin.LogIn("MASTER", "MASTERLOGIN!"), true);
+		assertEquals(admin.LogIn("MASTER", "MASTER"), true);
 		assertEquals(admin.getID().equals("MASTER"),true);
-		assertEquals(admin.getPASS().equals("MASTERLOGIN!"),true);
+		assertEquals(admin.getPASS().equals("MASTER"),true);
 		assertNotEquals(admin.getList().size(),0);
 	}
-	
+
 	@Test
 	public void AddOfficer() throws IOException {
 		System.out.println("************************AddOfficer************************");
-		assertEquals(admin.AddOfficer("demo", "demo"),true);
+		admin.AddOfficer("demoTest", "demoTest");
 	}
-	
+
 	@Test
 	public void removeOff() throws Exception {
-		assertEquals(admin.RemoveOfficer("demo"),true);
+		System.out.println("************************RemoveOfficer************************");
+		admin.AddOfficer("LIAN", "TEST");
+		admin.RemoveOfficer("LIAN");
 	}
-	
+
 	@Test
 	public void UpdatePaymentStatus() throws IOException {
 		System.out.println("************************UpdatePayment************************");
 		LocalDate date = LocalDate.now();
-		ParkingSpot s = new ParkingSpot("M5A0E2","TOR2020","UNPAID", 12,30, 2,35,date, 5);
+		ParkingSpot s = new ParkingSpot("abcs" ,"M5A0E2","TOR2020","PENDING","UNPAID", 12,30, 2,35,date, 5);
 		Officer off = new Officer();
 		off.AddSpot(s.getID(), 9);
-		List<ParkingSpot> spot = off.getSpots();
+		customer c = new customer();
+		c.bookSpot(s.getUnique(), s.getID(), s);
 		assertEquals(admin.ChangePaymentStatus(s),true);
 	}
 }

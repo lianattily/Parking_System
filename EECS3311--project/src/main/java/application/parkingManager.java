@@ -64,7 +64,7 @@ public class parkingManager implements Initializable{
 
 		spaceCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		paymentCol.setCellValueFactory(new PropertyValueFactory<>("stat"));
-		availCol.setCellValueFactory(new PropertyValueFactory<>("avail"));
+		availCol.setCellValueFactory(new PropertyValueFactory<>("rate"));
 		
 		requestcol.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		avail.setCellValueFactory(new PropertyValueFactory<>("stat"));
@@ -238,13 +238,20 @@ public class parkingManager implements Initializable{
 			return;
 		}
 		
-		if(officer.GrantRequest(bookingsView.getSelectionModel().getSelectedItem().getID())) {
+		if(officer.GrantRequest(bookingsView.getSelectionModel().getSelectedItem().getID(), bookingsView.getSelectionModel().getSelectedItem().getUnique())) {
 			bookingsView.getSelectionModel().getSelectedItem().setAvail();
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText(null); 
 			alert.setContentText("Booking has been granted."); 
 			alert.showAndWait();
 			fill();
+		}
+		else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null); 
+			alert.setContentText("Something went wrong, could not grant request with ID = "+bookingsView.getSelectionModel().getSelectedItem().getUnique()); 
+			alert.showAndWait();
+			
 		}
 	}
 	@FXML

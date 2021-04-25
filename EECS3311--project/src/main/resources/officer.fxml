@@ -23,7 +23,7 @@
                <children>
                   <ImageView fitHeight="69.0" fitWidth="73.0" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../Desktop/14580310081598811066-512.png" />
+                        <Image url="@14580310081598811066-512.png" />
                      </image>
                      <VBox.margin>
                         <Insets left="55.0" top="10.0" />
@@ -75,7 +75,7 @@
                <columns>
                   <TableColumn fx:id="spaceCol" prefWidth="75.0" text="Parking Spot" />
                   <TableColumn fx:id="paymentCol" prefWidth="75.0" text="Availability" />
-                  <TableColumn fx:id="availCol" prefWidth="75.0" text="Payment Status" />
+                  <TableColumn fx:id="availCol" prefWidth="75.0" text="Rate" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

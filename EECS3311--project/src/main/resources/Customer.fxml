@@ -20,7 +20,7 @@
                <children>
                   <ImageView fitHeight="86.0" fitWidth="84.0" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../Desktop/user-male.png" />
+                        <Image url="@user-male.png" />
                      </image>
                      <VBox.margin>
                         <Insets left="50.0" top="10.0" />

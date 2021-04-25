@@ -54,7 +54,7 @@ public class viewBooking implements Initializable{
 	}
 	@FXML
 	public void cancelBooking(ActionEvent event) throws Exception {
-		if(CUSTOMER.CancelBookings(bookingView.getSelectionModel().getSelectedItem().getID())) {
+		if(CUSTOMER.CancelBookings(bookingView.getSelectionModel().getSelectedItem().getID(),bookingView.getSelectionModel().getSelectedItem().getUnique() )) {
 			fill();
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setHeaderText(null); 

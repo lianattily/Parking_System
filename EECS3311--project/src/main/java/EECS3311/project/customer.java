@@ -70,7 +70,7 @@ public class customer implements User {
 			BufferedReader br  = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!=null) {
 				String [] values = line.split(",");
-				if(values[2].equals(ID)) return false;
+				if(values[2].equals(ID)) { System.out.println("FOUND CUSTOMER "+values[2]);return true;}
 			}
 			br.close();
 		}
@@ -78,11 +78,12 @@ public class customer implements User {
 		}
 
 
-		return true;
+		return false;
 	}
 
 	@Override
 	public void CreatAccount(String Fname, String Lname, String email, String Password) {
+
 		if(isExists(email)) return;
 		this.Fname=Fname;
 		this.Lname=Lname;
@@ -129,17 +130,17 @@ public class customer implements User {
 
 	@Override
 	public boolean LogIn(String email, String password) {
-		// TODO Auto-generated method stub
-		if(email==this.email && password==this.password)LogInStatus=true;
-
-		return LogInStatus;
+		LogInStatus = true;
+		return true;
 	}
 
 	public boolean bookSpot(String uniqueID,String ID,ParkingSpot spot) throws IOException {
 		if(BOOKINGS.size()>=3) return false;
-		customer cust = new customer();
 		System.out.println("LOOKING FOR SPOT : "+ID);
 		Officer o = new Officer();
+		for(ParkingSpot s: BOOKINGS) {
+			if(s.getID().equals(ID) && s.getUnique().equals(uniqueID)) return false;
+		}
 		List<ParkingSpot> s = o.getSpots();
 
 		for(ParkingSpot sp: s) {
@@ -158,7 +159,7 @@ public class customer implements User {
 	public boolean Pay(ParkingSpot ID) throws Exception {
 		PAYMENT.SetPaymentMethod(METHOD);
 		PAYMENT.METHOD=METHOD;
-		return updateUNPAID(ID.ID);
+		return updateUNPAID(ID.ID, ID.getUnique());
 	}
 
 	public static void setMethod(PaymentMethod m) {
@@ -169,7 +170,7 @@ public class customer implements User {
 		return BOOKINGS;
 	}
 
-	private boolean updateUNPAID(String toChange) throws Exception {
+	private boolean updateUNPAID(String toChange, String unique) throws Exception {
 
 		File file = new File("BookingsDatabase.txt");
 		File temp = new File("TempFile.txt");
@@ -177,32 +178,39 @@ public class customer implements User {
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
-		x.useDelimiter("[,\n]"); 
-		while(x.hasNext()) { 
-			uniqueID=x.next();
-			ID = x.next(); 
-			license = x.next();
-			PaymentStatus = x.next(); 
-			avail=x.next();
-			//N3W0A5,TORONTO123,UNPAID,12,30,22,45,22/04/2021,12
-			start = x.next()+","+x.next();
-			Expiration = x.next()+","+x.next();
-			date=x.next();
-			rate=x.next();
-			System.out.println("ID in line 176 = "+ID+" vs "+ toChange);
-			if(ID.equals(toChange)){ 
-				//pw.println(id+","+spot.ID+","+spot.LicensePlate+","+spot.getisPaid()+","+spot.getStat()+","+spot.StartHour+","+spot.StartMin+","+spot.EndHour+","+spot.EndMinute+","+strDate+","+spot.rate.getRate()); 
-
-				System.out.println("RE WRITING : "+ID+" , "+"Pending"+" , "+Expiration);
-				pw.println(uniqueID+","+ID+ "," + license +"," +"PENDING"+","+avail +","+start+","+ Expiration+","+date+","+rate); 
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader("BookingsDatabase.txt"));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				//090a0,L9A5G2,TORONTO124,UNPAID,PENDING,12,30,2,30,24/04/2021,8
+				// String uniqueID, String spacenum,String license,String payStat,String avail, int startH, int startM, int endH, int endM, LocalDate localDate, int rate
+				uniqueID=values[0];
+				ID =values[1]; 
+				license = values[2];
+				PaymentStatus =values[3];
+				avail=values[4];
+				//N3W0A5,TORONTO123,UNPAID,12,30,22,45,22/04/2021,12
+				start = values[5]+","+values[6];
+				Expiration = values[7]+","+values[8];
+				date=values[9];
+				rate=values[10];
+				System.out.println("ID in line 176 = "+ID+" vs "+ toChange);
+				if((!unique.equals(values[0]))){ 
+					System.out.println("RE WRITING : "+ID+" , "+PaymentStatus+" , "+Expiration);
+					pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+","+avail +","+start+","+ Expiration+","+date+","+rate); 
+				}
+				else {
+					System.out.println("UPDATING: "+ID+" , "+"PENDING"+" , "+Expiration);
+					pw.println(uniqueID+","+ID+ "," + license +"," +"PENDING"+","+avail +","+start+","+ Expiration+","+date+","+rate); 
+	
+				}
 			}
-			else {
-				System.out.println("KEEPING : "+ID+" , "+PaymentStatus+" , "+Expiration);
-				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+","+avail +","+start+","+ Expiration+","+date+","+rate); 
-			}
+			br.close();
 		}
-		x.close();
+		catch (Exception e) {
+
+		}
 		pw.flush();
 		pw.close();
 		fw.close();
@@ -217,18 +225,19 @@ public class customer implements User {
 		return temp.renameTo(dump);
 	}
 
-	public boolean CancelBookings(String ID) throws Exception {
+	public boolean CancelBookings(String ID,String unique) throws Exception {
 		for(ParkingSpot s: BOOKINGS) {
-			if(s.ID.equals(ID)) {
+			System.out.println("230"+s.getUnique()+"  vs "+unique);
+			if(s.getUnique().equals(unique)) {
 				s.isFilled=false;
 				BOOKINGS.remove(s);
-				return removeRecord(ID);
+				return removeRecord(ID, s.uniqueID);
 			}
 		}
 		return false;
 	}
 
-	private boolean removeRecord(String toRemove) throws Exception {
+	private boolean removeRecord(String toRemove, String unique) throws Exception {
 		for (int i = 0; i < BOOKINGS.size(); i++) {
 			ParkingSpot filter = BOOKINGS.get(i);
 
@@ -247,27 +256,37 @@ public class customer implements User {
 		FileWriter fw = new FileWriter("TempFile.txt",false); 
 		BufferedWriter bw = new BufferedWriter(fw); 
 		PrintWriter pw = new PrintWriter(bw); 
-		Scanner x = new Scanner(new File("BookingsDatabase.txt")); 
-		x.useDelimiter("[,\n]"); 
-		while(x.hasNext()) { 
-			uniqueID=x.next();
-			ID = x.next(); 
-			license = x.next();
-			PaymentStatus = x.next(); 
-			avail=x.next();
-			//N3W0A5,TORONTO123,UNPAID,12,30,22,45,22/04/2021,12
-			start = x.next()+","+x.next();
-			Expiration = x.next()+","+x.next();
-			date=x.next();
-			rate=x.next();
-			System.out.println("ID in line 176 = "+ID+" vs "+ toRemove);
-			if(!ID.equals(toRemove)){ 
-				System.out.println("RE WRITING : "+ID+" , "+PaymentStatus+" , "+Expiration);
-				pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+","+avail +","+start+","+ Expiration+","+date+","+rate); 
-
+		String line = ""; 
+		try {
+			BufferedReader br  = new BufferedReader(new FileReader("BookingsDatabase.txt"));
+			while((line = br.readLine())!=null) {
+				String [] values = line.split(",");
+				//090a0,L9A5G2,TORONTO124,UNPAID,PENDING,12,30,2,30,24/04/2021,8
+				// String uniqueID, String spacenum,String license,String payStat,String avail, int startH, int startM, int endH, int endM, LocalDate localDate, int rate
+				System.out.println("line = "+line);
+				uniqueID=values[0];
+				ID =values[1]; 
+				license = values[2];
+				PaymentStatus =values[3];
+				avail=values[4];
+				//N3W0A5,TORONTO123,UNPAID,12,30,22,45,22/04/2021,12
+				start = values[5]+","+values[6];
+				Expiration = values[7]+","+values[8];
+				date=values[9];
+				rate=values[10];
+				System.out.println("ID in line 176 = "+ID+" vs "+ toRemove+ "   unique "+unique+" vs "+uniqueID);
+				System.out.println(toRemove.equals(values[1]));
+				if(!unique.equals(values[0])){ 
+					System.out.println("RE WRITING : "+ID+" , "+PaymentStatus+" , "+Expiration);
+					pw.println(uniqueID+","+ID+ "," + license +"," +PaymentStatus+","+avail +","+start+","+ Expiration+","+date+","+rate); 
+				}		
 			}
+			br.close();
 		}
-		x.close();
+		catch (Exception e) {
+
+		}
+		
 		pw.flush();
 		pw.close();
 		fw.close();
